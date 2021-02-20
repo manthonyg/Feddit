@@ -2,7 +2,7 @@ import { BehaviorSubject, Subject } from "rxjs";
 import { Injectable } from "@angular/core";
 import { Post } from "../posts/models/post.model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-
+import { map } from 'rxjs/operators';
 @Injectable({providedIn: 'root'})
 export class PostService {
 
@@ -14,7 +14,8 @@ export class PostService {
   readonly postSource$ = this._postSource.asObservable()
 
   public fetchPosts() {
-    this._http.get<Post[]>(`${this.LOCALPATH}/api/posts`)
+    this._http
+    .get<Post[]>(`${this.LOCALPATH}/api/posts`)
     .subscribe((postData) => {
       this._postSource.next(postData)
     })
@@ -29,10 +30,11 @@ export class PostService {
   }
 
   public addPost(post: Post): void {
-    // optimistic updating vs not optimisitc updating
+    const newPost: Post = {_id: null, title: post.title, message: post.message}
     this._http.post<Post>(`${this.LOCALPATH}/api/posts`, post)
     .subscribe((post) => {
-      const newPosts = [...this.getPosts(), post]
+      newPost._id = post._id
+      const newPosts = [...this.getPosts(), newPost]
       this._setPosts(newPosts)
     })
   }

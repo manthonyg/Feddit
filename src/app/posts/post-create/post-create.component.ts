@@ -9,7 +9,7 @@ import { NgForm } from "@angular/forms";
   styleUrls: ['./post-create.component.css']
 })
 export class PostCreateComponent implements OnInit {
-  public post: Post = {id: '', message: '', title: ''};
+  public post: Post = {_id: '', message: '', title: ''};
 
   constructor(private postService: PostService) { }
 
@@ -21,7 +21,7 @@ export class PostCreateComponent implements OnInit {
     if (form.valid) {
     this.postService.addPost(
       {
-        id: null,
+        _id: null,
         title: form.value.title,
         message: form.value.message,
       }
