@@ -1,5 +1,5 @@
 import { BehaviorSubject, Subject } from "rxjs";
-import { Injectable } from "@angular/core";
+import { Injectable, ɵcompileNgModuleFactory__POST_R3__ } from "@angular/core";
 import { Post } from "../posts/models/post.model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map } from 'rxjs/operators';
@@ -45,15 +45,26 @@ export class PostService {
         'Content-Type': 'application/json',
       }),
       body: {
-       ...post 
+      ...post 
       },
     };
 
     this._http.delete(`${this.LOCALPATH}/api/posts`, options)
-    .subscribe((post) => {
+    .subscribe(() => {
       this.fetchPosts();
     });
   }
 
+  public getPost(postId: string) {
+    return this._http.get<Post>(`${this.LOCALPATH}/api/posts/${postId}`)
+  }
 
+  public updatePost(postId: string, updatedPost: Post) {
+      console.log('post', updatedPost)
+      this._http
+      .put(`${this.LOCALPATH}/api/posts/${postId}`, updatedPost)
+     .subscribe((updatedPost) => {
+        console.log({updatedPost})
+      });
+    }
 }

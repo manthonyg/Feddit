@@ -39,6 +39,7 @@ export class PostListComponent implements OnInit {
     }
   }
 
+
   public checkMessages(): void {
     const currentMessage = this.messagerService.getMessage()
     if (currentMessage.content !== null) {

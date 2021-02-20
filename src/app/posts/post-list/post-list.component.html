@@ -11,6 +11,7 @@
       </mat-expansion-panel-header>
       <p>{{ post.message }}</p> 
       <button mat-button (click)="handleDelete(post)">Delete</button>
+      <button mat-button [routerLink]="['edit', post._id]">Edit</button>
     </mat-expansion-panel>
   </mat-accordion>
 

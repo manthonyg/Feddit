@@ -3,10 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-// mongoose helps with schemas
 const Post = require('./models/post')
-
-// express is nothing but a big funnel of middleware
 
 // Connection URL
 const url = 'mongodb://localhost:27017/angular';
@@ -16,7 +13,7 @@ const options = { useUnifiedTopology: true, useNewUrlParser: true};
 const connectMongoose = async () => {
   try { 
   const connection = await mongoose.connect(url, options)
-  console.log(connection, 'connected')
+  console.log('connected')
   }
   catch(error) {
     console.log(error, 'not connected')
@@ -36,6 +33,9 @@ app.use((req, res, next) => {
 app.use(bodyParser.json()) // will return valid express middleware to parse json data
 // app.use(bodyParse.urlencoded({extended: true})) // would be for xml encoded stuff
 
+/**
+ * @description Create a new post
+ */
 app.post('/api/posts', async (req, res, next) => {
 
   try {
@@ -59,6 +59,9 @@ app.post('/api/posts', async (req, res, next) => {
   }
 });
 
+/**
+ * @description Get all posts
+ */
 app.get('/api/posts', async (req, res, next) => {
   try {
     const posts = await Post.find()
@@ -75,10 +78,54 @@ app.get('/api/posts', async (req, res, next) => {
   }
 });
 
+/**
+ * @description
+ * Update single post
+ */
+app.put('/api/posts/:postId', async (req, res, next) => {
+
+  try {
+    const updatedPost = await Post.updateOne({_id: req.params.postId}, req.body)
+    res
+    .status(200)
+    .json(updatedPost)
+  }
+  catch(error) {
+    console.log(error)
+    res.status(404)
+    .json({
+      message: 'Could not update post'
+    });
+  }
+});
+
+/**
+ * @description
+ * Get single post
+ */
+app.get('/api/posts/:postId', async (req, res, next) => {
+  try {
+    const postId = req.params.postId
+    const post = await Post.findById(postId)
+    res
+    .status(200)
+    .json(post);
+  }
+  catch(error) {
+    res
+    .status(404)
+    .json({
+      message: 'Could not find that post'
+    });
+  }
+});
+
+/**
+ * @description
+ * Delete single post
+ */
 app.delete('/api/posts', async (req, res, next) => {
   const targetId = req.body._id
-
-  console.log(targetId)
 
   try {
     await Post.deleteOne({_id: targetId})
@@ -100,7 +147,5 @@ app.delete('/api/posts', async (req, res, next) => {
 
 
 
-
-// will export everything 
 module.exports = app;
 
