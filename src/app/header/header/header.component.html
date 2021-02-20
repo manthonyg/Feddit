@@ -1,5 +1,12 @@
 <p>
   <mat-toolbar>
     <span>Feddit</span>
+    <span class="example-spacer"></span>
+  <button mat-button routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" aria-label="button to view all posts">
+    View Posts
+  </button>
+  <button mat-button routerLink="/create" routerLinkActive="active-link" aria-label="button to create a new post">
+    Create Post
+  </button>
   </mat-toolbar>
 </p>

@@ -1,4 +1,4 @@
-  <mat-accordion class="post-container">
+  <mat-accordion *ngIf="!!postList" class="post-container">
     <mat-expansion-panel class="post" *ngFor="let post of postList" 
                           (opened)="panelOpenState = true"
                           (closed)="panelOpenState = false">
@@ -10,6 +10,11 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <p>{{ post.message }}</p> 
-      <button (click)="handleDelete(post)">Delete</button>
+      <button mat-button (click)="handleDelete(post)">Delete</button>
     </mat-expansion-panel>
   </mat-accordion>
+
+  <mat-accordion *ngIf="postList.length === 0" class="post-container">
+    <p class="post-status"><em>No Posts</em></p>
+  </mat-accordion>
+

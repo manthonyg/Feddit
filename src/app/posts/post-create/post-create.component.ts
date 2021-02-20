@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Post } from "../models/post.model";
 import { PostService } from "../../services/post.service";
 import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
+import { MessagerService } from 'src/app/services/messager.service';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-post-create',
@@ -11,7 +14,10 @@ import { NgForm } from "@angular/forms";
 export class PostCreateComponent implements OnInit {
   public post: Post = {_id: '', message: '', title: ''};
 
-  constructor(private postService: PostService) { }
+  constructor(
+    private postService: PostService, 
+    private router: Router, 
+    private messagerService: MessagerService) { }
 
   ngOnInit(): void {
   }
@@ -28,6 +34,9 @@ export class PostCreateComponent implements OnInit {
     );
     form.resetForm()
   }
+  const message = {content: 'Test', type: 'Success', duration: 3000}
+  this.messagerService.createMessage(message)
+  this.router.navigate(['/'])
 }
 
 }

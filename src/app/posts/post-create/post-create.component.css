@@ -31,3 +31,7 @@ textarea {
   border-radius: 5px;
   padding: 10px;
 }
+
+.snackbar-success {
+  background-color: seagreen;
+}

@@ -14,6 +14,7 @@ import { HeaderComponent } from './header/header/header.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { HttpClientModule } from "@angular/common/http";
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +31,7 @@ import { HttpClientModule } from "@angular/common/http";
     MatInputModule,
     MatCardModule,
     MatToolbarModule,
+    MatSnackBarModule,
     MatButtonModule,
     MatExpansionModule
   ],
