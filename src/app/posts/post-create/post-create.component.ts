@@ -34,7 +34,7 @@ export class PostCreateComponent implements OnInit {
     );
     form.resetForm()
   }
-  const message = {content: 'Test', type: 'Success', duration: 3000}
+  const message = {content: 'Message posted', type: 'Success', duration: 3000}
   this.messagerService.createMessage(message)
   this.router.navigate(['/'])
 }

@@ -44,9 +44,6 @@ export class PostListComponent implements OnInit {
     if (currentMessage.content !== null) {
       this.messagerService.openSnackBar()
     }
-    // this.snackbarRef.afterDismissed().subscribe((event) => {
-    //   this.messagerService.clearMessages()
-    // })
   }
 
 

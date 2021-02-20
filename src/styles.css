@@ -3,20 +3,27 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+:root {
+  --alert-success: #99cc33;
+  --alert-error: #cc3300
+}
+
 .snackbar-success {
-  color: green;
+  color: var(--alert-success);
+  border: 2px solid var(--alert-success)
 }
 
 .snackbar-success button {
-  color: green;
-  border: 2px solid green;
+  color: var(--alert-success);
+  border: 2px solid var(--alert-success);
 }
 
 .snackbar-error {
-  color: red;
+  color: var(--alert-error);
+  border: 2px solid var(--alert-error);
 }
 
 .snackbar-error button {
-  color: red;
-  border: 2px solid red;
+  color:var(--alert-error);
+  border: 2px solid var(--alert-error);
 }
