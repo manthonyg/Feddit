@@ -1,0 +1,33 @@
+.post-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.example-form {
+  display: flex;
+  width: 500px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.post-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem;
+}
+
+textarea {
+  width: 400px;
+  height: 100px;
+}
+
+.full-width-form {
+  width: 500px;
+  background-color: #cccccc50;
+  margin: 10px;
+  border-radius: 5px;
+  padding: 10px;
+}

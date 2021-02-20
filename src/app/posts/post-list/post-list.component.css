@@ -1,0 +1,13 @@
+.post {
+  width: 500px !important;
+  background-color: #cccccc50;
+  border-radius: 5px;
+  margin: 20px;
+}
+
+.post-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
