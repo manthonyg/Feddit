@@ -45,7 +45,9 @@ export class PostCreateComponent implements OnInit {
   public handleSubmitPost(form: NgForm): void {
 
     let alertMessage: Message;
-
+    if (form.invalid) {
+      this.messagerService.createMessage({content: 'Failed to post', type: 'Error', duration: 3000})
+    }
     if (form.valid) {
       if (this.mode === 'create') {
         this.postService.addPost(

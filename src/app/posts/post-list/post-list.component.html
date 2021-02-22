@@ -14,6 +14,7 @@
       <button mat-button [routerLink]="['edit', post._id]">Edit</button>
     </mat-expansion-panel>
   </mat-accordion>
+  <mat-spinner *ngIf="isPostsLoading">HELLO</mat-spinner>
 
   <mat-accordion *ngIf="postList.length === 0" class="post-container">
     <p class="post-status"><em>No Posts</em></p>

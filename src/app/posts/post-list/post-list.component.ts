@@ -15,12 +15,16 @@ export class PostListComponent implements OnInit {
     private postService: PostService, 
     private messagerService: MessagerService) { }
 
+  public isPostsLoading: boolean = false;
   public postList: Post[];
   public panelOpenState: boolean = false;
-
+  
   ngOnInit(): void {
+    this.isPostsLoading = true;
     this.postService.postSource$.subscribe((postList) => {
       this.postList = postList
+      this.isPostsLoading = false;
+  
     })
 
     this.postService.fetchPosts()
