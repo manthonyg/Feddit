@@ -1,15 +1,42 @@
 
 <mat-card class="post-form-container">
-<form class="example-form" #postForm="ngForm" (submit)="handleSubmitPost(postForm)">
+<form [formGroup]="form" (submit)="handleSubmitPost()">
   <mat-form-field class="full-width-form">
     <mat-label>Title</mat-label>
-    <input type="text" matInput [ngModel]="post?.title" name="title" #title required minlength="3">
-    <mat-error *ngIf="!title.valid">Title must be greater than 3 characters</mat-error>
+    <input 
+    type="text" 
+    matInput 
+    [ngModel]="post?.title" 
+    formControlName="title">
+    <mat-error *ngIf="form.get('title').invalid">Title must be greater than 3 characters</mat-error>
   </mat-form-field>
+  <div>
+    <button mat-stroked-button (click)="openImageSelect()">Add image</button>
+      <input 
+      hidden 
+      (change)="handleImageSelect()"
+      class="image-input" 
+      #imageInput 
+      type="file">
+  </div>
+  <div class="flex-container">
+  <div class="image-preview-container" [ngClass]="{selected: imagePreview}">
+        <img class="image-preview" [src]="imagePreview" [alt]="form.value.title">
+  </div>
+</div>
   <mat-form-field class="full-width-form">
+ 
     <mat-label>Message</mat-label>
-    <textarea rows="6" matInput [ngModel]="post?.message" name="message" #message maxlength="256" placeholder="Ex. I need help with..." required></textarea>
-    <mat-error *ngIf="!message.valid">Message must be under 256 characters</mat-error>
+
+    <textarea 
+    rows="6" 
+    matInput 
+    [ngModel]="post?.message" 
+    placeholder="Ex. I need help with..."
+    formControlName="message"
+    ></textarea>
+
+    <mat-error *ngIf="form.get('message').invalid">Message must be under 256 characters</mat-error>
     <mat-hint align="start"><strong>Think: would you say this to your mother?</strong> </mat-hint>
     <mat-hint align="end">{{ post?.message.length }} / 256</mat-hint>
   </mat-form-field>

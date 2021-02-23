@@ -33,15 +33,16 @@ export class PostListComponent implements OnInit {
   }
 
   public handleDelete(post: Post): void {
-    try {
-    this.postService.deletePost(post)
-    
-    this.messagerService.createMessage({type: "Success", content: `Deleted ${post.title}`, duration: 5000})
+      this.postService.deletePost(post)
+      .subscribe(
+        response => {
+          this.messagerService.createMessage({type: "Success", content: `Deleted ${post.title}`, duration: 5000})
+          this.postService.fetchPosts()
+        }, 
+        error => {
+          this.messagerService.createMessage({type: "Error", content: `Could not delete post`, duration: 5000})
+      });
     }
-    catch(error) {
-      this.messagerService.createMessage({type: "Error", content: `Could not delete post`, duration: 5000})
-    }
-  }
 
 
   public checkMessages(): void {

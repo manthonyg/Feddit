@@ -32,6 +32,33 @@ textarea {
   padding: 10px;
 }
 
+.image-preview {
+  width: 100px;
+}
+.flex-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+
+.image-preview-container {
+  border: 2px dashed #cccccc80;
+  border-radius: 5px;
+  text-align: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  display: flex;
+}
+
+.image-preview-container.selected {
+  border: 3px dashed seagreen;
+}
+
 .snackbar-success {
   background-color: seagreen;
+}
+
+.image-input {
+  display: hidden;
 }

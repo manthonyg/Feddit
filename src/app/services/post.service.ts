@@ -1,5 +1,5 @@
-import { BehaviorSubject, Subject } from "rxjs";
-import { Injectable, ɵcompileNgModuleFactory__POST_R3__ } from "@angular/core";
+import { BehaviorSubject, Subject, Observable } from "rxjs";
+import { Injectable } from "@angular/core";
 import { Post } from "../posts/models/post.model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map } from 'rxjs/operators';
@@ -39,7 +39,7 @@ export class PostService {
     })
   }
 
-  public deletePost(post: Post): void {
+  public deletePost(post: Post): Observable<any> {
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -49,11 +49,8 @@ export class PostService {
       },
     };
 
-    this._http.delete(`${this.LOCALPATH}/api/posts`, options)
-    .subscribe(() => {
-      this.fetchPosts();
-    });
-  }
+      return this._http.delete(`${this.LOCALPATH}/api/posts`, options)
+}
 
   public getPost(postId: string) {
     return this._http.get<Post>(`${this.LOCALPATH}/api/posts/${postId}`)
