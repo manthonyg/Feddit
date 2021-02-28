@@ -1,31 +1,62 @@
-const express = require("express")
+const express = require("express");
 const router = express.Router();
-const Post = require('../models/post')
+const Post = require('../models/post');
+const multer = require('multer');
+
+const storageLocation = multer.diskStorage({
+  // will be executed whenever multer tries to save a file
+  destination: (request, file, callback) => {
+
+    const isValid = MIME_TYPE_MAP[file.mimetype]
+
+    // file path is relative to server 
+    if (!isValid) {
+      throw new Error('Invalid MYME type')
+    }
+    callback(null, "backend/images");
+
+  },
+  filename: (request, file, callback) => {
+    const name = file.originalname.toLowerCase().split(' ').join('-');
+    const MIME_TYPE_MAP = {
+      'image/png': 'png',
+      'image/jpeg': 'jpeg'
+    }
+    const extension = MIME_TYPE_MAP[file.mimetype]
+    callback(null, name + '-' + Date.now() + '.' + extension)
+
+  }
+
+})
 /** 
  * @description Create a new post
  */
-router.post('/posts', async (req, res, next) => {
+router.post('/posts', multer(storageLocation).single("image"), async (req, res, next) => {
 
-  try {
+  const url = req.protocol + '://' + req.get("host");
+  console.log(req.imagePath)
+  console.log({url})
+  // try {
     const post = new Post({
     title: req.body.title,
-    message: req.body.message
-  })
+    message: req.body.message,
+    imagePath: url + '/images/' + req.image.filename
+  });
 
   const savedPost = await post.save()
 
   res
   .status(201)
   .json(savedPost)
-  }
-  catch(error) {
-    res
-    .status(404)
-    .json({
-      message: "Could not create post"
-    });
-  }
-});
+  });
+  // catch(error) {
+  //   res
+  //   .status(404)
+  //   .json({
+  //     message: "Could not create post"
+  //   });
+  // }
+// });
 
 /**
  * @description Get all posts
