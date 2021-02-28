@@ -5,7 +5,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 :root {
   --alert-success: #99cc33;
-  --alert-error: #cc3300
+  --alert-error: #cc3300;
+  --light-gray: #cccccc80;
 }
 
 .snackbar-success {

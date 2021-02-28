@@ -51,8 +51,12 @@ textarea {
   display: flex;
 }
 
-.image-preview-container.selected {
-  border: 3px dashed seagreen;
+.image-preview-container.valid {
+  border: 3px dashed var(--alert-success);
+}
+
+.image-preview-container.invalid {
+  border: 3px dashed var(--alert-error);
 }
 
 .snackbar-success {

@@ -6,12 +6,11 @@
     <input 
     type="text" 
     matInput 
-    [ngModel]="post?.title" 
     formControlName="title">
     <mat-error *ngIf="form.get('title').invalid">Title must be greater than 3 characters</mat-error>
   </mat-form-field>
   <div>
-    <button mat-stroked-button (click)="openImageSelect()">Add image</button>
+    <button type="button" mat-stroked-button (click)="openImageSelect()">Add image</button>
       <input 
       hidden 
       (change)="handleImageSelect()"
@@ -20,9 +19,14 @@
       type="file">
   </div>
   <div class="flex-container">
-  <div class="image-preview-container" [ngClass]="{selected: imagePreview}">
-        <img class="image-preview" [src]="imagePreview" [alt]="form.value.title">
+    <div class="image-preview-container" [ngClass]="{valid: form.get('imagePath').valid, invalid: form.get('imagePath').invalid}">
+        <img class="image-preview" *ngIf="form.get('imagePath').valid" [src]="imagePreview" [alt]="form.value.title">
+    </div>
+
+  <div *ngIf="imagePreview !== '' && form.get('imagePath').invalid">
+    <mat-error>Invalid file type</mat-error>
   </div>
+  
 </div>
   <mat-form-field class="full-width-form">
  
@@ -31,7 +35,6 @@
     <textarea 
     rows="6" 
     matInput 
-    [ngModel]="post?.message" 
     placeholder="Ex. I need help with..."
     formControlName="message"
     ></textarea>

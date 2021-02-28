@@ -30,7 +30,9 @@ export class PostService {
   }
 
   public addPost(post: Post): void {
-    const newPost: Post = {_id: null, title: post.title, message: post.message}
+    const newPost: Post = {_id: null, title: post.title, message: post.message, imagePath: post.imagePath}
+
+    console.log({post})
     this._http.post<Post>(`${this.LOCALPATH}/api/posts`, post)
     .subscribe((post) => {
       newPost._id = post._id

@@ -4,20 +4,20 @@ import { PostService } from "../../services/post.service";
 import { NgForm, FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router, RouterModule, ActivatedRoute, RouterLink, ParamMap } from "@angular/router";
 import { MessagerService } from 'src/app/services/messager.service';
-import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef} from '@angular/material/snack-bar';
 import { Message } from "../../models/message.model";
+import { mimeType } from "../../validators/mime-type.validator";
 @Component({
   selector: 'app-post-create',
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css']
 })
 export class PostCreateComponent implements OnInit {
-  public post: Post = {_id: '', message: '', title: ''};
+  public post: Post = {_id: '', message: '', title: '', imagePath: ''};
   public mode: string = 'create';
   private _postId: string;
   public isLoading: boolean = false;
   public form: FormGroup;
-  public imagePreview: string | ArrayBuffer;
+  public imagePreview: string | ArrayBuffer = '';
 
   @ViewChild('imageInput') imageInput;
 
@@ -29,7 +29,7 @@ export class PostCreateComponent implements OnInit {
    
 
   ngOnInit(): void {
-    //TODO make this into a swtich case and clean it up
+    //TODO make this into a switch case and clean it up
 
     this.form = new FormGroup({
       title: new FormControl(null, {
@@ -38,8 +38,8 @@ export class PostCreateComponent implements OnInit {
       message: new FormControl(null, {
         validators: [Validators.required, Validators.maxLength(255)]
       }),
-      image: new FormControl(null, {
-        validators: [Validators.required]
+      imagePath: new FormControl(null, {
+        validators: [Validators.required, mimeType(this.imagePreview)],
       })
     });
 
@@ -52,7 +52,8 @@ export class PostCreateComponent implements OnInit {
           this.post = {
             _id: postData._id,
             title: postData.title,
-            message: postData.message 
+            message: postData.message,
+            imagePath: postData.imagePath
         }
       });
         this.form.setValue(
@@ -78,28 +79,26 @@ export class PostCreateComponent implements OnInit {
 
     if (this.form.valid) {
 
-      try {
       if (this.mode === 'create') {
         this.postService.addPost(
           {
           _id: null,
           title: this.form.value.title,
           message: this.form.value.message,
+          imagePath: this.form.value.imagePath
         }
       );
       alertMessage = {content: 'Post created', type: 'Success', duration: 3000}
     }
     this.form.reset();
   }
-  catch(error) {
-    alertMessage = {content: 'Failed to post', type: 'Error', duration: 3000}
-  }
 
     if (this.mode === 'edit') {
       const updatedPost = {
         _id: this.post._id,
         title: this.form.value.title,
-        message: this.form.value.message
+        message: this.form.value.message,
+        imagePath: this.form.value.imagePath
       };
       this.postService.updatePost(this.post._id, updatedPost)
       alertMessage = {content: 'Post updated', type: 'Success', duration: 3000}
@@ -108,17 +107,16 @@ export class PostCreateComponent implements OnInit {
       this.router.navigate(['/'])
       this.form.reset()
   }
-}
+
 
   public openImageSelect() {
-    console.log(this.imageInput)
     this.imageInput.nativeElement.click()
   }
 
   public handleImageSelect() {
     const file = this.imageInput.nativeElement.files[0]
-    this.form.patchValue({'image': file})
-    this.form.get('image').updateValueAndValidity();
+    this.form.patchValue({'imagePath': file})
+    this.form.get('imagePath').updateValueAndValidity();
 
     const reader = new FileReader();
     reader.onload = () => {
