@@ -3,6 +3,12 @@ const router = express.Router();
 const Post = require('../models/post');
 const multer = require('multer');
 
+const MIME_TYPE_MAP = {
+  'image/png': 'png',
+  'image/jpeg': 'jpeg',
+  'image/jpg': 'jpeg'
+}
+
 const storageLocation = multer.diskStorage({
   // will be executed whenever multer tries to save a file
   destination: (request, file, callback) => {
@@ -11,36 +17,34 @@ const storageLocation = multer.diskStorage({
 
     // file path is relative to server 
     if (!isValid) {
-      throw new Error('Invalid MYME type')
+      throw new Error('Invalid MIME type')
     }
     callback(null, "backend/images");
 
   },
   filename: (request, file, callback) => {
     const name = file.originalname.toLowerCase().split(' ').join('-');
-    const MIME_TYPE_MAP = {
-      'image/png': 'png',
-      'image/jpeg': 'jpeg'
-    }
+  
     const extension = MIME_TYPE_MAP[file.mimetype]
     callback(null, name + '-' + Date.now() + '.' + extension)
+    }
+});
 
-  }
-
-})
+const upload = multer({ storage: storageLocation })
 /** 
  * @description Create a new post
  */
-router.post('/posts', multer(storageLocation).single("image"), async (req, res, next) => {
+router.post('/posts', upload.single("imagePath"), async (req, res, next) => {
 
   const url = req.protocol + '://' + req.get("host");
+  console.log(req.file)
   console.log(req.imagePath)
-  console.log({url})
+
   // try {
     const post = new Post({
-    title: req.body.title,
-    message: req.body.message,
-    imagePath: url + '/images/' + req.image.filename
+      title: req.body.title,
+      message: req.body.message,
+      imagePath: url + '/images/' + req.file.filename
   });
 
   const savedPost = await post.save()

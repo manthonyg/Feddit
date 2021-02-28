@@ -30,15 +30,22 @@ export class PostService {
   }
 
   public addPost(post: Post): void {
-    const newPost: Post = {_id: null, title: post.title, message: post.message, imagePath: post.imagePath}
 
-    console.log({post})
-    this._http.post<Post>(`${this.LOCALPATH}/api/posts`, post)
+    const postData = new FormData();
+      postData.append('title', post.title);
+      postData.append('message', post.message);
+      postData.append('imagePath', post.imagePath);
+
+    this._http.post<Post>(`${this.LOCALPATH}/api/posts`, postData)
     .subscribe((post) => {
-      newPost._id = post._id
+      console.log('new post inside services', post)
+      const newPost: Post = {
+        _id: post._id,
+        ...post
+      }
       const newPosts = [...this.getPosts(), newPost]
       this._setPosts(newPosts)
-    })
+    });
   }
 
   public deletePost(post: Post): Observable<any> {

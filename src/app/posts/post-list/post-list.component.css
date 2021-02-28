@@ -15,3 +15,14 @@
 .snackbar-success {
   background-color: seagreen;
 }
+
+.post-image-container {
+  display: flex;
+  justify-content: center;
+}
+
+.post-image {
+  width: 200px;
+  text-align: center;
+  margin: 10px;
+}
