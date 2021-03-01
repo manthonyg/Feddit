@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Post } from "../models/post.model";
 import { PostService } from "../../services/post.service";
 import { NgForm, FormGroup, FormControl, Validators } from "@angular/forms";
@@ -11,7 +11,7 @@ import { mimeType } from "../../validators/mime-type.validator";
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css']
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit, AfterViewInit {
   public post: Post = {_id: '', message: '', title: '', imagePath: ''};
   public mode: string = 'create';
   private _postId: string;
@@ -20,13 +20,15 @@ export class PostCreateComponent implements OnInit {
   public imagePreview: string | ArrayBuffer = '';
 
   @ViewChild('imageInput') imageInput;
+  @ViewChild('formRef') formRef;
+
 
   constructor(
     private postService: PostService, 
     private router: Router, 
     private messagerService: MessagerService,
     private route: ActivatedRoute) { }
-   
+  
 
   ngOnInit(): void {
     //TODO make this into a switch case and clean it up
@@ -39,68 +41,86 @@ export class PostCreateComponent implements OnInit {
         validators: [Validators.required, Validators.maxLength(255)]
       }),
       imagePath: new FormControl(null, {
-        validators: [Validators.required, mimeType(this.imagePreview)],
+        validators: [mimeType(this.imagePreview)],
       })
     });
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      console.log(paramMap.get('postId'))
       if (paramMap.has('postId')) {
         this.mode = 'edit'
         this._postId = paramMap.get('postId')
         this.postService.getPost(this._postId)
+
         .subscribe(postData => {
+          console.log('found post!', postData)
           this.post = {
             _id: postData._id,
             title: postData.title,
             message: postData.message,
             imagePath: postData.imagePath
-        }
-      });
+        };
         this.form.setValue(
           {
-            title: this.post.title, 
-            message: this.post.message
+            title: postData.title,
+            message: postData.message,
+            imagePath: postData.imagePath 
           });
+      });
+
       }
+
+
       else {
         this.mode = 'create'
       }
+
+
     });
   }
+
+  ngAfterViewInit(): void {
+    this.formRef.nativeElement.focus();
+  };
 
   public handleSubmitPost(): void {
     
     let alertMessage: Message;
 
     if (this.form.invalid) {
-      this.messagerService.createMessage({content: 'Failed to post', type: 'Error', duration: 3000})
-      return
+      alertMessage = {content: "Failed to post", type: "Error", duration: 3000}
+      return this.messagerService.createMessage(alertMessage)
     }
 
-    if (this.form.valid) {
+    else if (this.form.valid) {
 
       if (this.mode === 'create') {
-        this.postService.addPost(
-          {
-          _id: null,
-          title: this.form.value.title,
-          message: this.form.value.message,
-          imagePath: this.form.value.imagePath
+        const newPost: Post = {
+            _id: null,
+            title: this.form.value.title,
+            message: this.form.value.message,
+            imagePath: this.form.value.imagePath
         }
-      );
-      alertMessage = {content: 'Post created', type: 'Success', duration: 3000}
-    }
-    this.form.reset();
-  }
+        this.postService.addPost(newPost);
+        alertMessage = {content: 'Post created', type: 'Success', duration: 3000}
+      };
+    };
 
     if (this.mode === 'edit') {
-      const updatedPost = {
+      const updatedPost: Post = {
         _id: this.post._id,
         title: this.form.value.title,
         message: this.form.value.message,
         imagePath: this.form.value.imagePath
       };
-      this.postService.updatePost(this.post._id, updatedPost)
+
+      this.postService.updatePost(
+        updatedPost._id, 
+        updatedPost.title, 
+        updatedPost.message, 
+        updatedPost.imagePath
+      );
+
       alertMessage = {content: 'Post updated', type: 'Success', duration: 3000}
     } 
       this.messagerService.createMessage(alertMessage)

@@ -38,7 +38,6 @@ export class PostService {
 
     this._http.post<Post>(`${this.LOCALPATH}/api/posts`, postData)
     .subscribe((post) => {
-      console.log('new post inside services', post)
       const newPost: Post = {
         _id: post._id,
         ...post
@@ -65,12 +64,31 @@ export class PostService {
     return this._http.get<Post>(`${this.LOCALPATH}/api/posts/${postId}`)
   }
 
-  public updatePost(postId: string, updatedPost: Post) {
-      console.log('post', updatedPost)
+  public updatePost(postId: string, title: string, message: string, imagePath: string | File) {
+      console.log('updatePost from within services', {postId, title, message, imagePath});
+
+      const postData: Post = {
+        _id: postId,
+        title: title,
+        message: message,
+        imagePath: imagePath
+      }
+
       this._http
-      .put(`${this.LOCALPATH}/api/posts/${postId}`, updatedPost)
-     .subscribe((updatedPost) => {
-        console.log({updatedPost})
+      .put<Post>(`${this.LOCALPATH}/api/posts/${postId}`, postData)
+      .subscribe((response) => {
+
+        const currentPosts = this.getPosts()
+        const targetPostIdx = currentPosts.findIndex(post => post._id === postId)
+        const updatedPost: Post = {
+          _id: response._id,
+          title: response.title,
+          message: response.message,
+          imagePath: response.imagePath
+        }
+        currentPosts[targetPostIdx] = updatedPost
+        console.log({currentPosts})
+        this._setPosts(currentPosts)
       });
     }
 }

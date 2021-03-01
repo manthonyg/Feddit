@@ -38,7 +38,6 @@ router.post('/posts', upload.single("imagePath"), async (req, res, next) => {
 
   const url = req.protocol + '://' + req.get("host");
   console.log(req.file)
-  console.log(req.imagePath)
 
   // try {
     const post = new Post({
@@ -53,14 +52,6 @@ router.post('/posts', upload.single("imagePath"), async (req, res, next) => {
   .status(201)
   .json(savedPost)
   });
-  // catch(error) {
-  //   res
-  //   .status(404)
-  //   .json({
-  //     message: "Could not create post"
-  //   });
-  // }
-// });
 
 /**
  * @description Get all posts
@@ -85,21 +76,28 @@ router.get('/posts', async (req, res, next) => {
  * @description
  * Update single post
  */
-router.put('/posts/:postId', async (req, res, next) => {
+router.put('/posts/:postId', upload.single("imagePath"), async (req, res, next) => {
+    
+  const url = req.protocol + '://' + req.get("host");
+   
+  const updatedPost = new Post({
+        title: req.body.title,
+        message: req.body.message,
+        imagePath: url + '/images/' + req.file.filename
+    });
+    await Post.updateOne({_id: req.params.postId}, updatedPost)
 
-  try {
-    const updatedPost = await Post.updateOne({_id: req.params.postId}, req.body)
     res
     .status(200)
     .json(updatedPost)
-  }
-  catch(error) {
-    console.log(error)
-    res.status(404)
-    .json({
-      message: 'Could not update post'
-    });
-  }
+
+  // catch(error) {
+  //   console.log(error)
+  //   res.status(404)
+  //   .json({
+  //     message: 'Could not update post'
+  //   });
+  // }
 });
 
 /**
