@@ -1,6 +1,10 @@
 
 <mat-card class="post-form-container">
+  
 <form [formGroup]="form" #formRef (submit)="handleSubmitPost()">
+  <div class="existing-image-preview-container" *ngIf="post.imagePath">
+    <img class="existing-image-preview" [src]="post.imagePath">
+  </div>
   <mat-form-field class="full-width-form">
     <mat-label>Title</mat-label>
     <input 
@@ -12,7 +16,9 @@
     <mat-error *ngIf="form.get('title').invalid">Title must be greater than 3 characters</mat-error>
   </mat-form-field>
   <div>
-    <button type="button" mat-stroked-button (click)="openImageSelect()">Add image</button>
+   
+    <button type="button" mat-stroked-button (click)="openImageSelect()">
+      {{ !post.imagePath ? 'Add image' : 'Change image' }}</button>
       <input 
       hidden 
       (change)="handleImageSelect()"
@@ -21,8 +27,9 @@
       type="file">
   </div>
   <div class="flex-container">
+   
     <div class="image-preview-container" [ngClass]="{valid: form.get('image').valid, invalid: form.get('image').invalid}">
-        <img class="image-preview" [src]="imagePreview" [alt]="form.value.title">
+        <img class="image-preview" *ngIf="imagePreview" [src]="imagePreview" [alt]="form.value.title">
     </div>
 
   <div *ngIf="imagePreview !== '' && form.get('image').invalid">

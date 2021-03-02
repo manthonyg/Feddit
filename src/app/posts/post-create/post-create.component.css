@@ -59,6 +59,17 @@ textarea {
   border: 3px dashed var(--alert-error);
 }
 
+.existing-image-preview-container {
+  width: 50px;
+  margin: 20px;
+
+}
+
+.existing-image-preview {
+  width: 50px;
+  border-radius: 100%;
+};
+
 .snackbar-success {
   background-color: seagreen;
 }

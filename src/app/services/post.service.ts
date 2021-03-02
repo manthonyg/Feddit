@@ -3,19 +3,22 @@ import { Injectable } from "@angular/core";
 import { Post } from "../posts/models/post.model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map } from 'rxjs/operators';
+import { Router } from "@angular/router";
 @Injectable({providedIn: 'root'})
 export class PostService {
 
 
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient, private _router: Router) { }
   
   LOCALPATH = "http://localhost:3000"
   private readonly _postSource = new BehaviorSubject<Post[]>([])
   readonly postSource$ = this._postSource.asObservable()
 
-  public fetchPosts() {
+  public fetchPosts(pageSize: number, page: number) {
+
+    const queryParams = `?pagesize=${pageSize}&page=${page}`
     this._http
-    .get<Post[]>(`${this.LOCALPATH}/api/posts`)
+    .get<Post[]>(`${this.LOCALPATH}/api/posts/${queryParams}`)
     .subscribe((postData) => {
       this._postSource.next(postData)
     })
@@ -77,14 +80,12 @@ export class PostService {
 
       switch(typeof(image)) {
         case 'object':
-          console.log('this is object')
           postData = new FormData();
           postData.append('title', title);
           postData.append('message', message);
           postData.append('image', image, title);
           break;
         case 'string':
-          console.log('this is string');
           postData = {
             _id: postId,
             title: title,
@@ -92,6 +93,8 @@ export class PostService {
             imagePath: image
           };
           break;
+        default:
+          throw new Error('Invalid image type: Image is not of type File or String');
       }
 
       this._http

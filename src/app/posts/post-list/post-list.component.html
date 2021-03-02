@@ -22,4 +22,10 @@
   <mat-accordion *ngIf="postList.length === 0" class="post-container">
     <p class="post-status"><em>No Posts</em></p>
   </mat-accordion>
-
+  <mat-paginator 
+  [length]="length"
+  [pageSize]="pageSize"
+  [pageIndex]="page - 1"
+  [pageSizeOptions]="pageSizeOptions"
+  (page)="handlePage($event)">
+</mat-paginator>

@@ -37,28 +37,44 @@ const upload = multer({ storage: storageLocation })
 router.post('/posts', upload.single("image"), async (req, res, next) => {
 
   const url = req.protocol + '://' + req.get("host");
-  console.log(req.file)
 
-  // try {
     const post = new Post({
       title: req.body.title,
       message: req.body.message,
       imagePath: url + '/images/' + req.file.filename
   });
 
-  const savedPost = await post.save()
-
-  res
-  .status(201)
-  .json(savedPost)
-  });
+  try {
+    const savedPost = await post.save()
+    res
+    .status(201)
+    .json(savedPost)
+  }
+  catch(error) {
+    res
+    .status(404)
+    .send('Could not create post')
+  }
+});
 
 /**
  * @description Get all posts
  */
 router.get('/posts', async (req, res, next) => {
+
+  const pageSize = req.query.pagesize;
+  const currentPage = req.query.page;
+  const postQuery = Post.find();
+
+  if (pageSize && currentPage) {   
+    postQuery
+    .skip(pageSize * (currentPage - 1))
+    .limit(+pageSize);
+  }
+
   try {
-    const posts = await Post.find()
+    const posts = await postQuery;
+
     res
     .status(200)
     .json(posts);
@@ -66,9 +82,7 @@ router.get('/posts', async (req, res, next) => {
   catch(error) {
     res
     .status(404)
-    .json({
-      message: 'Could not find any posts'
-    });
+    .send('Could not get posts')
   }
 });
 
@@ -79,24 +93,30 @@ router.get('/posts', async (req, res, next) => {
 router.put('/posts/:postId', upload.single("image"), async (req, res, next) => {
     
   const url = req.protocol + '://' + req.get("host");
-  console.log(req.file);
-  console.log(req.body)
   let imagePath = req.body.imagePath;
 
   if (req.file) {
     // multer found an image File
       imagePath = url + '/images/' + req.file.filename
   }
+
     updatedPost = {
       title: req.body.title,
       message: req.body.message,
       imagePath: imagePath
     }
-  
-    await Post.updateOne({_id: req.params.postId}, updatedPost)
-    res
-    .status(200)
-    .json(updatedPost)
+    
+    try {
+      await Post.updateOne({_id: req.params.postId}, updatedPost)
+      res
+      .status(200)
+      .json(updatedPost)
+    }
+    catch(error) {
+      res
+      .status(404)
+      .send('Could not update post')
+    }
 });
 
 /**
@@ -114,9 +134,7 @@ router.get('/posts/:postId', async (req, res, next) => {
   catch(error) {
     res
     .status(404)
-    .json({
-      message: 'Could not find that post'
-    });
+    .send('Could not find post')
   }
 });
 
@@ -139,9 +157,7 @@ router.delete('/posts', async (req, res, next) => {
   catch(error) {
     res
     .status(404)
-    .json({
-      message: 'Could not delete post'
-    });
+    .send('Could not delete post')
   }
 });
 
