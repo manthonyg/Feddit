@@ -1,7 +1,7 @@
 import { AbstractControl } from "@angular/forms"
 import { ValidatorFn } from "@angular/forms";
 
-export function mimeType(image: ArrayBuffer | String): ValidatorFn {
+export function mimeType(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
     if (control.value === 'string') {
       return null

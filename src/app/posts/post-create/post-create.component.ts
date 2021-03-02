@@ -40,8 +40,8 @@ export class PostCreateComponent implements OnInit, AfterViewInit {
       message: new FormControl(null, {
         validators: [Validators.required, Validators.maxLength(255)]
       }),
-      imagePath: new FormControl(null, {
-        validators: [mimeType(this.imagePreview)],
+      image: new FormControl(null, {
+        validators: [mimeType],
       })
     });
 
@@ -64,7 +64,7 @@ export class PostCreateComponent implements OnInit, AfterViewInit {
           {
             title: postData.title,
             message: postData.message,
-            imagePath: postData.imagePath 
+            image: postData.imagePath 
           });
       });
 
@@ -95,30 +95,24 @@ export class PostCreateComponent implements OnInit, AfterViewInit {
     else if (this.form.valid) {
 
       if (this.mode === 'create') {
-        const newPost: Post = {
-            _id: null,
-            title: this.form.value.title,
-            message: this.form.value.message,
-            imagePath: this.form.value.imagePath
-        }
-        this.postService.addPost(newPost);
+
+        this.postService.addPost(
+          this.form.value.title, 
+          this.form.value.message, 
+          this.form.value.image
+        );
+
         alertMessage = {content: 'Post created', type: 'Success', duration: 3000}
       };
     };
 
     if (this.mode === 'edit') {
-      const updatedPost: Post = {
-        _id: this.post._id,
-        title: this.form.value.title,
-        message: this.form.value.message,
-        imagePath: this.form.value.imagePath
-      };
 
       this.postService.updatePost(
-        updatedPost._id, 
-        updatedPost.title, 
-        updatedPost.message, 
-        updatedPost.imagePath
+        this.post._id, 
+        this.form.value.title, 
+        this.form.value.message, 
+        this.form.value.image
       );
 
       alertMessage = {content: 'Post updated', type: 'Success', duration: 3000}
@@ -135,8 +129,8 @@ export class PostCreateComponent implements OnInit, AfterViewInit {
 
   public handleImageSelect() {
     const file = this.imageInput.nativeElement.files[0]
-    this.form.patchValue({'imagePath': file})
-    this.form.get('imagePath').updateValueAndValidity();
+    this.form.patchValue({'image': file})
+    this.form.get('image').updateValueAndValidity();
 
     const reader = new FileReader();
     reader.onload = () => {

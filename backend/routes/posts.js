@@ -34,7 +34,7 @@ const upload = multer({ storage: storageLocation })
 /** 
  * @description Create a new post
  */
-router.post('/posts', upload.single("imagePath"), async (req, res, next) => {
+router.post('/posts', upload.single("image"), async (req, res, next) => {
 
   const url = req.protocol + '://' + req.get("host");
   console.log(req.file)
@@ -76,28 +76,27 @@ router.get('/posts', async (req, res, next) => {
  * @description
  * Update single post
  */
-router.put('/posts/:postId', upload.single("imagePath"), async (req, res, next) => {
+router.put('/posts/:postId', upload.single("image"), async (req, res, next) => {
     
   const url = req.protocol + '://' + req.get("host");
-   
-  const updatedPost = new Post({
-        title: req.body.title,
-        message: req.body.message,
-        imagePath: url + '/images/' + req.file.filename
-    });
-    await Post.updateOne({_id: req.params.postId}, updatedPost)
+  console.log(req.file);
+  console.log(req.body)
+  let imagePath = req.body.imagePath;
 
+  if (req.file) {
+    // multer found an image File
+      imagePath = url + '/images/' + req.file.filename
+  }
+    updatedPost = {
+      title: req.body.title,
+      message: req.body.message,
+      imagePath: imagePath
+    }
+  
+    await Post.updateOne({_id: req.params.postId}, updatedPost)
     res
     .status(200)
     .json(updatedPost)
-
-  // catch(error) {
-  //   console.log(error)
-  //   res.status(404)
-  //   .json({
-  //     message: 'Could not update post'
-  //   });
-  // }
 });
 
 /**

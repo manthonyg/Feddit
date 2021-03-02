@@ -21,12 +21,11 @@
       type="file">
   </div>
   <div class="flex-container">
-    <div class="image-preview-container" [ngClass]="{valid: form.get('imagePath').valid, invalid: form.get('imagePath').invalid}">
-        <img class="image-preview" *ngIf="post.imagePath" [src]="post.imagePath" [alt]="form.value.title">
-        <img class="image-preview" *ngIf="form.get('imagePath').valid && !post.imagePath" [src]="post.imagePath" [alt]="form.value.title">
+    <div class="image-preview-container" [ngClass]="{valid: form.get('image').valid, invalid: form.get('image').invalid}">
+        <img class="image-preview" [src]="imagePreview" [alt]="form.value.title">
     </div>
 
-  <div *ngIf="imagePreview !== '' && form.get('imagePath').invalid">
+  <div *ngIf="imagePreview !== '' && form.get('image').invalid">
     <mat-error>Invalid file type</mat-error>
   </div>
   

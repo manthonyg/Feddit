@@ -29,12 +29,15 @@ export class PostService {
     return this._postSource.next(posts)
   }
 
-  public addPost(post: Post): void {
+  public addPost(
+    title: string, 
+    message: string, 
+    image: File): void {
 
     const postData = new FormData();
-      postData.append('title', post.title);
-      postData.append('message', post.message);
-      postData.append('imagePath', post.imagePath);
+      postData.append('title', title);
+      postData.append('message', message);
+      postData.append('image', image);
 
     this._http.post<Post>(`${this.LOCALPATH}/api/posts`, postData)
     .subscribe((post) => {
@@ -64,30 +67,45 @@ export class PostService {
     return this._http.get<Post>(`${this.LOCALPATH}/api/posts/${postId}`)
   }
 
-  public updatePost(postId: string, title: string, message: string, imagePath: string | File) {
-      console.log('updatePost from within services', {postId, title, message, imagePath});
+  public updatePost(
+    postId: string, 
+    title: string, 
+    message: string, 
+    image: string | File
+    ) {
+     let postData: Post | FormData;
 
-      const postData: Post = {
-        _id: postId,
-        title: title,
-        message: message,
-        imagePath: imagePath
+      switch(typeof(image)) {
+        case 'object':
+          console.log('this is object')
+          postData = new FormData();
+          postData.append('title', title);
+          postData.append('message', message);
+          postData.append('image', image, title);
+          break;
+        case 'string':
+          console.log('this is string');
+          postData = {
+            _id: postId,
+            title: title,
+            message: message,
+            imagePath: image
+          };
+          break;
       }
 
       this._http
       .put<Post>(`${this.LOCALPATH}/api/posts/${postId}`, postData)
       .subscribe((response) => {
-
-        const currentPosts = this.getPosts()
+        const currentPosts = this.getPosts();
         const targetPostIdx = currentPosts.findIndex(post => post._id === postId)
         const updatedPost: Post = {
-          _id: response._id,
-          title: response.title,
-          message: response.message,
+          _id: postId,
+          title: title,
+          message: message,
           imagePath: response.imagePath
         }
         currentPosts[targetPostIdx] = updatedPost
-        console.log({currentPosts})
         this._setPosts(currentPosts)
       });
     }
