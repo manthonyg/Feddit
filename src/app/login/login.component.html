@@ -1,0 +1,35 @@
+<div class="flex-container">
+
+<form [formGroup]="form" (submit)="handleLogin()">
+  
+  <mat-form-field class="full-width-form">
+    <mat-label>Username</mat-label>
+    <input 
+    matInput
+    formControlName="username"
+    type="text" 
+    >
+    <mat-error *ngIf="form.get('username').invalid">Title must be greater than 3 characters</mat-error>
+  </mat-form-field>
+  <div class="flex-container">
+
+  
+</div>
+  <mat-form-field class="full-width-form"> 
+    <mat-label>Password</mat-label>
+
+    <input 
+    matInput
+    formControlName="password"
+    placeholder="Ex. I need help with..."
+    >
+
+    <mat-error *ngIf="form.get('password').invalid">Password too short. Must be atleast 6 characters.</mat-error>
+    <mat-hint align="start"><strong></strong> </mat-hint>
+    <mat-hint align="end"></mat-hint>
+  </mat-form-field>
+  <div class="post-button-container">
+  <button type="submit" mat-button color="primary">Login</button>
+   </div> 
+</form>
+</div>

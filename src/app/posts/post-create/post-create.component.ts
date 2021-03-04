@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Post } from "../models/post.model";
 import { PostService } from "../../services/post.service";
-import { NgForm, FormGroup, FormControl, Validators } from "@angular/forms";
-import { Router, RouterModule, ActivatedRoute, RouterLink, ParamMap } from "@angular/router";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Router, ActivatedRoute, RouterLink, ParamMap } from "@angular/router";
 import { MessagerService } from 'src/app/services/messager.service';
 import { Message } from "../../models/message.model";
 import { mimeType } from "../../validators/mime-type.validator";
@@ -46,7 +46,7 @@ export class PostCreateComponent implements OnInit, AfterViewInit {
     });
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      console.log(paramMap.get('postId'))
+
       if (paramMap.has('postId')) {
         this.mode = 'edit'
         this._postId = paramMap.get('postId')

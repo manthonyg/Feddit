@@ -1,9 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PostService } from "../../services/post.service";
 import { Post } from "../models/post.model";
 import { MessagerService } from "../../services/messager.service";
-import { MAT_SNACK_BAR_DATA, MatSnackBarRef} from '@angular/material/snack-bar';
-import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
@@ -57,6 +56,9 @@ export class PostListComponent implements OnInit {
       .subscribe(
         response => {
           this.messagerService.createMessage({type: "Success", content: `Deleted ${post.title}`, duration: 5000})
+          this.postService.fetchPosts(this.pageSize, this.page);
+          this.postService.getPostCount();
+
         }, 
         error => {
           this.messagerService.createMessage({type: "Error", content: `Could not delete post`, duration: 5000})

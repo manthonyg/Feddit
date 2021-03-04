@@ -1,7 +1,7 @@
-import { BehaviorSubject, Subject } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { Injectable } from "@angular/core";
 import { Message } from "../models/message.model";
-import { MatSnackBar, MatSnackBarRef, MatSnackBarConfig} from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig} from '@angular/material/snack-bar';
 
 @Injectable({providedIn: 'root'})
 export class MessagerService {
