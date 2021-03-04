@@ -22,13 +22,14 @@ export class PostListComponent implements OnInit {
   public panelOpenState: boolean = false;
 
   // Paginator
-  public length: number = 3;
-  public pageSize: number = 1;
-  public page: number = 1;
+  public pageSize: number = 5;
+  public page: number = 5;
   public totalPosts = 0;
-  public pageSizeOptions: number[] = [1, 2, 5];
+  public pageSizeOptions: number[] = [5];
   
   ngOnInit(): void {
+
+    this.postService.getPostCount();
 
     this.route.queryParams.subscribe(params => {
       this.pageSize = params['pagesize']
@@ -38,8 +39,11 @@ export class PostListComponent implements OnInit {
     this.isPostsLoading = true;
     this.postService.postSource$.subscribe((postData) => {
       this.postList = postData;
-      this.totalPosts = postData.length;
       this.isPostsLoading = false;
+    });
+
+    this.postService.postCount$.subscribe((postCount) => {
+      this.totalPosts = postCount;
     });
 
     this.postService.fetchPosts(this.pageSize, this.page)
@@ -62,6 +66,7 @@ export class PostListComponent implements OnInit {
   public handlePage(pageData): void {
     this.page = pageData.pageIndex + 1;
     this.pageSize = pageData.pageSize;
+    // this.numberOfPages = Math.ceil(this.postList.length / this.pageSize);
     this.postService.fetchPosts(this.pageSize, this.page);
     const queryParams: Params = { page: this.page, pagesize: this.pageSize };
     

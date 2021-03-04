@@ -57,14 +57,35 @@ router.post('/posts', upload.single("image"), async (req, res, next) => {
   }
 });
 
+
+/**
+ * @description Get all posts count
+ */
+router.get('/posts/count', async (req, res, next) => {
+
+  try {
+    const postCount = await Post.count();
+
+    res
+    .status(200)
+    .json(postCount)
+  }
+  catch(error) {
+    res
+    .status(404)
+    .send('Could not count posts')
+  }
+});
+
+
 /**
  * @description Get all posts
  */
 router.get('/posts', async (req, res, next) => {
 
-  const pageSize = req.query.pagesize;
-  const currentPage = req.query.page;
-  const postQuery = Post.find();
+  const pageSize = +req.query.pagesize;
+  const currentPage = +req.query.page;
+  const postQuery = Post.find().limit(5);
 
   if (pageSize && currentPage) {   
     postQuery

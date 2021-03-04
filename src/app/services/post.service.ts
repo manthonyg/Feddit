@@ -11,8 +11,11 @@ export class PostService {
   constructor(private _http: HttpClient, private _router: Router) { }
   
   LOCALPATH = "http://localhost:3000"
-  private readonly _postSource = new BehaviorSubject<Post[]>([])
-  readonly postSource$ = this._postSource.asObservable()
+  private readonly _postSource = new BehaviorSubject<Post[]>([]);
+  private readonly _postCount = new BehaviorSubject<number>(0);
+
+  readonly postCount$ = this._postCount.asObservable();
+  readonly postSource$ = this._postSource.asObservable();
 
   public fetchPosts(pageSize: number, page: number) {
 
@@ -27,6 +30,15 @@ export class PostService {
   public getPosts(): Post[] {
     return this._postSource.getValue()
   }
+
+  public getPostCount() {
+    this._http
+    .get<number>(`${this.LOCALPATH}/api/posts/count`)
+    .subscribe((postCount) => {
+      this._postCount.next(postCount)
+    })
+  }
+
 
   private _setPosts(posts: Post[]): void {
     return this._postSource.next(posts)
