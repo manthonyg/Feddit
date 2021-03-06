@@ -3,7 +3,9 @@ import { FormGroup, Validators, FormControl, FormBuilder } from '@angular/forms'
 import { MessagerService } from "../services/messager.service";
 import { Message } from "../models/message.model";
 import { checkPasswords } from "../validators/password-match.validator";
-
+import { AuthData } from "../models/auth-data.model";
+import { UserService } from "../services/user.service";
+import { Router } from "@angular/router";
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -14,7 +16,7 @@ export class RegisterComponent implements OnInit {
   public form: FormGroup;
   private _alertMessage: Message;
 
-  constructor(private messagerService: MessagerService) { }
+  constructor(private messagerService: MessagerService, private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
 
@@ -25,22 +27,20 @@ export class RegisterComponent implements OnInit {
       password: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(6)]
       }),
-      passwordConfirm: new FormControl(null, {
-        validators: [Validators.required]
-      }),
     });
   }
 
 
 
-  handleRegister(): void {
+  handleRegister() {
     if (this.form.invalid) {
       this._alertMessage = {content: "Could not register", type: "Error", duration: 3000}
       return this.messagerService.createMessage(this._alertMessage)
     }
 
     if (this.form.valid) {
-      console.log(this.form.value.username, this.form.value.password, 'successfully registered')
+      const authData: AuthData = {username: this.form.value.username, password: this.form.value.password}
+      return this.userService.createUser(authData) 
     }
   }
 

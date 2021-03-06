@@ -7,7 +7,6 @@ import { Router } from "@angular/router";
 @Injectable({providedIn: 'root'})
 export class PostService {
 
-
   constructor(private _http: HttpClient, private _router: Router) { }
   
   LOCALPATH = "http://localhost:3000"

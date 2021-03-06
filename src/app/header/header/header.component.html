@@ -1,6 +1,7 @@
 <p>
   <mat-toolbar>
     <span>Feddit</span>
+    <span class="log-status" *ngIf="currentUser.username">Logged in as: {{ currentUser.username }}</span>
     <span class="example-spacer"></span>
   <button mat-button routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" aria-label="button to view all posts">
     View Posts
@@ -8,10 +9,10 @@
   <button mat-button routerLink="/create" routerLinkActive="active-link" aria-label="button to create a new post">
     Create Post
   </button>
-  <button mat-button routerLink="/login" routerLinkActive="active-link" aria-label="button to log a user in">
+  <button *ngIf="!currentUser.username" mat-button routerLink="/login" routerLinkActive="active-link" aria-label="button to log a user in">
    Login 
   </button>
-  <button mat-button routerLink="/register" routerLinkActive="active-link" aria-label="button to log a user in">
+  <button *ngIf="!currentUser.username" mat-button routerLink="/register" routerLinkActive="active-link" aria-label="button to log a user in">
    Register
   </button>
   </mat-toolbar>

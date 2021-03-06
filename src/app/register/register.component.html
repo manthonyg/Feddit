@@ -21,6 +21,7 @@
       <input 
       matInput
       formControlName="password"
+      type="password"
       >
       <mat-error *ngIf="form.get('password').invalid">
         Password too short. Must be atleast 6 characters.</mat-error>
@@ -29,7 +30,7 @@
 
   
     </div>
-    <mat-form-field class="full-width-form"> 
+    <!-- <mat-form-field class="full-width-form"> 
       <mat-label>Password</mat-label>
   
       <input 
@@ -38,7 +39,7 @@
       >
   
       <mat-error *ngIf="form.get('passwordConfirm').invalid">Passwords must match</mat-error>
-    </mat-form-field>
+    </mat-form-field> -->
 
     <div class="post-button-container">
     <button type="submit" mat-button color="primary">Register</button>

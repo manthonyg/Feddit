@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const postRoutes = require("./routes/posts");
+const userRoutes = require('./routes/user');
 const path = require("path");
 
 // Connection URL
@@ -35,6 +36,7 @@ app.use(bodyParser.json()) // will return valid express middleware to parse json
 app.use("/images", express.static(path.join("backend/images")));
 
 app.use("/api", postRoutes);
+app.use("/api", userRoutes);
 
 module.exports = app;
 

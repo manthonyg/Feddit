@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { User } from '../models/user.model';
+import { AuthData } from "../models/auth-data.model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-
+import { Router } from "@angular/router";
 @Injectable({providedIn: 'root'})
   export class UserService {
 
-    constructor(private _http: HttpClient) {}
+    constructor(private _http: HttpClient, private router: Router) {}
     private LOCALPATH = "http://localhost:3000"
 
     private readonly _userSource = new BehaviorSubject<User>({username: '', posts: []});
@@ -19,15 +20,19 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
     private _setUser = (userInfo: User) => {
       this._userSource.next(userInfo)
     }
-
-    public fetchUsers = () => {
+    
+    public createUser = (userInfo) => {
       return this._http
-      .get<User>(`${this.LOCALPATH}/api/users/`)
-      }
+      .post<AuthData>(`${this.LOCALPATH}/api/user/register`, userInfo)
+      .subscribe(user => {
+        this._setUser({username: user.username, posts: []})
+        this.router.navigate(['/'])
+      })
+    }
 
     public fetchUser = (username: string) => {
       this._http
-      .get<User>(`${this.LOCALPATH}/api/users/${username}`)
+      .get<User>(`${this.LOCALPATH}/api/user/${username}`)
       .subscribe(user => {
         this._setUser(user)
       });    
