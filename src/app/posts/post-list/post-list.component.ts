@@ -3,6 +3,7 @@ import { PostService } from "../../services/post.service";
 import { Post } from "../models/post.model";
 import { MessagerService } from "../../services/messager.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
@@ -13,12 +14,14 @@ export class PostListComponent implements OnInit {
   constructor(
     private postService: PostService, 
     private messagerService: MessagerService,
+    private userService: UserService,
     private route: ActivatedRoute,
     private router: Router) { }
 
   public isPostsLoading: boolean = false;
   public postList: Post[];
   public panelOpenState: boolean = false;
+  public token: string = null;
 
   // Paginator
   public pageSize: number = 5;
@@ -48,6 +51,10 @@ export class PostListComponent implements OnInit {
     this.postService.fetchPosts(this.pageSize, this.page)
 
     this.checkMessages()
+
+    this.userService.tokenSource$.subscribe(token => {
+      this.token = token
+    })
   }
 
 

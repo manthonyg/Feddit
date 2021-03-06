@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Post = require('../models/post');
 const multer = require('multer');
+const checkAuth = require('../middleware/check-auth');
 
 const MIME_TYPE_MAP = {
   'image/png': 'png',
@@ -34,7 +35,7 @@ const upload = multer({ storage: storageLocation })
 /** 
  * @description Create a new post
  */
-router.post('/posts', upload.single("image"), async (req, res, next) => {
+router.post('/posts', checkAuth, upload.single("image"), async (req, res, next) => {
 
   const url = req.protocol + '://' + req.get("host");
 
@@ -111,7 +112,7 @@ router.get('/posts', async (req, res, next) => {
  * @description
  * Update single post
  */
-router.put('/posts/:postId', upload.single("image"), async (req, res, next) => {
+router.put('/posts/:postId', checkAuth, upload.single("image"), async (req, res, next) => {
     
   const url = req.protocol + '://' + req.get("host");
   let imagePath = req.body.imagePath;
@@ -163,7 +164,7 @@ router.get('/posts/:postId', async (req, res, next) => {
  * @description
  * Delete single post
  */
-router.delete('/posts', async (req, res, next) => {
+router.delete('/posts', checkAuth, async (req, res, next) => {
   const targetId = req.body._id
 
   try {

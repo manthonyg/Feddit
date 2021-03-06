@@ -47,7 +47,8 @@ export class PostService {
     title: string, 
     message: string, 
     image: File): void {
-
+    
+    try {
     const postData = new FormData();
       postData.append('title', title);
       postData.append('message', message);
@@ -62,6 +63,10 @@ export class PostService {
       const newPosts = [...this.getPosts(), newPost]
       this._setPosts(newPosts)
     });
+  }
+  catch(error) {
+    console.log(error)
+  }
   }
 
   public deletePost(post: Post): Observable<any> {

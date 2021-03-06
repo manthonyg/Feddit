@@ -95,7 +95,7 @@ export class PostCreateComponent implements OnInit, AfterViewInit {
     else if (this.form.valid) {
 
       if (this.mode === 'create') {
-
+        try {
         this.postService.addPost(
           this.form.value.title, 
           this.form.value.message, 
@@ -103,6 +103,10 @@ export class PostCreateComponent implements OnInit, AfterViewInit {
         );
 
         alertMessage = {content: 'Post created', type: 'Success', duration: 3000}
+        }
+        catch(error) {
+          alertMessage = {content: 'Failed to create', type: 'Error', duration: 3000}
+        }
       };
     };
 

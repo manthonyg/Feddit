@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
     if (this.form.valid) {
       console.log('sending user info to the user service');
       this.userService.login({username: this.form.value.username, password: this.form.value.password})
+      this.router.navigate(['/']);
     }
   }
 
