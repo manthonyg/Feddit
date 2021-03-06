@@ -30,6 +30,15 @@ import { Router } from "@angular/router";
       })
     }
 
+    public login = (userInfo: AuthData) => {
+      return this._http
+      .post<string>(`${this.LOCALPATH}/api/user/login`, userInfo)
+      .subscribe(token => {
+        localStorage.setItem('token', token['token'])
+        console.log(token, 'was set in LS');
+      });
+    }
+
     public fetchUser = (username: string) => {
       this._http
       .get<User>(`${this.LOCALPATH}/api/user/${username}`)

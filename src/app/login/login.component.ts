@@ -2,7 +2,8 @@ import { Message } from "../models/message.model";
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { MessagerService } from '../services/messager.service';
-
+import { UserService } from "../services/user.service";
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class LoginComponent implements OnInit {
   public form: FormGroup;
   private _alertMessage: Message;
 
-  constructor(private messagerService: MessagerService) { }
+  constructor(private messagerService: MessagerService, private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
 
@@ -37,7 +38,8 @@ export class LoginComponent implements OnInit {
     }
 
     if (this.form.valid) {
-      console.log(this.form.value.username, this.form.value.password)
+      console.log('sending user info to the user service');
+      this.userService.login({username: this.form.value.username, password: this.form.value.password})
     }
   }
 
