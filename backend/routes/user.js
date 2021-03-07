@@ -60,7 +60,8 @@ router.post('/user/login', async (req, res, next) => {
     res
     .status(200)
     .json({
-      token: token
+      token: token,
+      duration: 3000
     });
   }
   catch(error) {

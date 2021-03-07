@@ -4,6 +4,7 @@ import { Post } from "../models/post.model";
 import { MessagerService } from "../../services/messager.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import { Token } from '../../models/token.model';
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
@@ -21,7 +22,7 @@ export class PostListComponent implements OnInit {
   public isPostsLoading: boolean = false;
   public postList: Post[];
   public panelOpenState: boolean = false;
-  public token: string = null;
+  public token: Token;
 
   // Paginator
   public pageSize: number = 5;
@@ -53,7 +54,7 @@ export class PostListComponent implements OnInit {
     this.checkMessages()
 
     this.userService.tokenSource$.subscribe(token => {
-      this.token = token
+      this.token = token;
     })
   }
 
