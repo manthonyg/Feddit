@@ -1,20 +1,20 @@
 <p>
   <mat-toolbar>
     <span>Feddit</span>
-    <span class="log-status" *ngIf="token">Logged in as: {{ currentUser.username }}</span>
+    <p class="log-status" *ngIf="isLoggedIn">{{ currentUser.username }} </p>
     <span class="example-spacer"></span>
-  <button mat-button  *ngIf="token" routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" aria-label="button to view all posts">
+  <button mat-button  *ngIf="isLoggedIn" routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" aria-label="button to view all posts">
     View Posts
   </button>
-  <button *ngIf="token" mat-button routerLink="/create" routerLinkActive="active-link" aria-label="button to create a new post">
+  <button *ngIf="isLoggedIn" mat-button routerLink="/create" routerLinkActive="active-link" aria-label="button to create a new post">
     Create Post
   </button>
-  <button *ngIf="!token" mat-button routerLink="/login" routerLinkActive="active-link" aria-label="button to log a user in">
+  <button *ngIf="!isLoggedIn" mat-button routerLink="/login" routerLinkActive="active-link" aria-label="button to log a user in">
    Login 
   </button>
-  <button *ngIf="!token" mat-button routerLink="/register" routerLinkActive="active-link" aria-label="button to log a user in">
+  <button *ngIf="!isLoggedIn" mat-button routerLink="/register" routerLinkActive="active-link" aria-label="button to log a user in">
    Register
   </button>
-  <button *ngIf="token" (click)="handleLogout()" type="button">Logout</button>
+  <button *ngIf="isLoggedIn" (click)="handleLogout()" type="button">Logout</button>
   </mat-toolbar>
 </p>

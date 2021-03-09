@@ -23,6 +23,8 @@ export class PostListComponent implements OnInit {
   public postList: Post[];
   public panelOpenState: boolean = false;
   public token: Token;
+  public isLoggedIn: boolean = false;
+  public currentUser = null;
 
   // Paginator
   public pageSize: number = 5;
@@ -39,6 +41,7 @@ export class PostListComponent implements OnInit {
       this.page = params['page']
     });
 
+
     this.isPostsLoading = true;
     this.postService.postSource$.subscribe((postData) => {
       this.postList = postData;
@@ -51,11 +54,19 @@ export class PostListComponent implements OnInit {
 
     this.postService.fetchPosts(this.pageSize, this.page)
 
+    this.userService.logStatusSource$.subscribe(newStatus => {
+      this.isLoggedIn = newStatus
+    });
+
     this.checkMessages()
 
     this.userService.tokenSource$.subscribe(token => {
       this.token = token;
-    })
+    });
+
+    this.userService.userSource$.subscribe(user => {
+      this.currentUser = user
+    });
   }
 
 

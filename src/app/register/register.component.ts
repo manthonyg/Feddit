@@ -16,7 +16,10 @@ export class RegisterComponent implements OnInit {
   public form: FormGroup;
   private _alertMessage: Message;
 
-  constructor(private messagerService: MessagerService, private userService: UserService, private router: Router) { }
+  constructor(
+    private messagerService: MessagerService, 
+    private userService: UserService, 
+    private router: Router) { }
 
   ngOnInit(): void {
 
@@ -40,7 +43,15 @@ export class RegisterComponent implements OnInit {
 
     if (this.form.valid) {
       const authData: AuthData = {username: this.form.value.username, password: this.form.value.password}
-      return this.userService.createUser(authData) 
+      try {
+        this.userService.createUser(authData)
+        this._alertMessage = {content: "Successfully registered. Please log in", type: "Success", duration: 3000};
+        return this.messagerService.createMessage(this._alertMessage);
+      }
+      catch(error) {
+        this._alertMessage = {content: "Could not register", type: "Error", duration: 3000};
+        return this.messagerService.createMessage(this._alertMessage);
+      }
     }
   }
 

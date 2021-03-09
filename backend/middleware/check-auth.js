@@ -5,7 +5,13 @@ module.exports = (req, res, next) => {
   const token = req.headers.authorization.split(' ')[1] // 2nd word after 'bearer' should be the token
   try {
   console.log(token)
-  jwt.verify(token, 'secret_development') // check to see if this is a legit jwt, with our secret 
+  // we get the info from within the decoded token (jwt not encrypted)
+  const decodedToken = jwt.verify(token, 'secret_development') // check to see if this is a legit jwt, with our secret
+  // we pass this on in the request in a property called userData
+  req.userData = {
+    username: decodedToken.username,
+    userId: decodedToken.userId
+  } 
   next(); // all is good, send request
   } catch(error) {
     res

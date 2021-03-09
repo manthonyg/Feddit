@@ -13,8 +13,8 @@
         <img class="post-image" [src]="post.imagePath">
       </div>
       <p>{{ post.message }}</p> 
-      <button *ngIf="token" mat-button (click)="handleDelete(post)">Delete</button>
-      <button *ngIf="token" mat-button [routerLink]="['edit', post._id]">Edit</button>
+      <button *ngIf="isLoggedIn && currentUser.id === post.creator" mat-button (click)="handleDelete(post)">Delete</button>
+      <button *ngIf="isLoggedIn && currentUser.id === post.creator" mat-button [routerLink]="['edit', post._id]">Edit</button>
     </mat-expansion-panel>
   </mat-accordion>
   <mat-spinner *ngIf="isPostsLoading">HELLO</mat-spinner>

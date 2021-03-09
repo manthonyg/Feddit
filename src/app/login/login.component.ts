@@ -16,7 +16,10 @@ export class LoginComponent implements OnInit {
   public form: FormGroup;
   private _alertMessage: Message;
 
-  constructor(private messagerService: MessagerService, private userService: UserService, private router: Router) { }
+  constructor(
+    private messagerService: MessagerService, 
+    private userService: UserService, 
+    private router: Router) { }
 
   ngOnInit(): void {
 
@@ -38,10 +41,9 @@ export class LoginComponent implements OnInit {
     }
 
     if (this.form.valid) {
-      console.log('sending user info to the user service');
       this.userService.login({username: this.form.value.username, password: this.form.value.password})
       this.router.navigate(['/']);
-    }
   }
-
+ }
 }
+

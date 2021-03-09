@@ -20,8 +20,8 @@
 
     <input 
     matInput
+    type="password"
     formControlName="password"
-    placeholder="Ex. I need help with..."
     >
 
     <mat-error *ngIf="form.get('password').invalid">Password too short. Must be atleast 6 characters.</mat-error>

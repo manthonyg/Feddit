@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from "../../services/user.service";
+import { Token } from "../../models/token.model";
+import { MessagerService } from 'src/app/services/messager.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -7,16 +9,35 @@ import { UserService } from "../../services/user.service";
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService,
+    private messagerService: MessagerService
+    ) { }
 
   public currentUser = null;
-  public token = null;
+  public token: Token = null;
+  public isLoggedIn: boolean = false;
 
   ngOnInit(): void {
+
+    this.userService.checkUserAuth();
+
     this.userService.userSource$
     .subscribe(user => {
+      console.log(user)
       this.currentUser = user
     })
+
+    this.userService.logStatusSource$
+    .subscribe(newLogStatus => {
+      if (newLogStatus === false && this.isLoggedIn === true) {
+        this.messagerService.createMessage({content: 'Logged out', type: 'Success', duration: 1500})
+      }
+      else if (newLogStatus === true && this.isLoggedIn === false) {
+        this.messagerService.createMessage({content: `Logged in`, type: 'Success', duration: 1500})
+      }
+      this.isLoggedIn = newLogStatus
+    });
 
     this.userService.tokenSource$
     .subscribe(token => {
@@ -27,9 +48,6 @@ export class HeaderComponent implements OnInit {
 
 
   handleLogout = () => {
-    // clear ls
-    localStorage.clear()
-
     // reset the token inside of the service
     this.userService.logout()
   }

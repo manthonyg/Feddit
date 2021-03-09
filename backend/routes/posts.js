@@ -3,6 +3,7 @@ const router = express.Router();
 const Post = require('../models/post');
 const multer = require('multer');
 const checkAuth = require('../middleware/check-auth');
+const { updateNamespaceExportDeclaration } = require("typescript");
 
 const MIME_TYPE_MAP = {
   'image/png': 'png',
@@ -42,9 +43,9 @@ router.post('/posts', checkAuth, upload.single("image"), async (req, res, next) 
     const post = new Post({
       title: req.body.title,
       message: req.body.message,
-      imagePath: url + '/images/' + req.file.filename
+      imagePath: url + '/images/' + req.file.filename,
+      creator: req.userData.userId
   });
-
   try {
     const savedPost = await post.save()
     res
@@ -54,7 +55,9 @@ router.post('/posts', checkAuth, upload.single("image"), async (req, res, next) 
   catch(error) {
     res
     .status(404)
-    .send('Could not create post')
+    .json({
+      error: 'Could not create post'
+    })
   }
 });
 
@@ -66,7 +69,6 @@ router.get('/posts/count', async (req, res, next) => {
 
   try {
     const postCount = await Post.count();
-
     res
     .status(200)
     .json(postCount)
@@ -74,13 +76,15 @@ router.get('/posts/count', async (req, res, next) => {
   catch(error) {
     res
     .status(404)
-    .send('Could not count posts')
+    .json({
+      error: 'Could not get post count'
+    })
   }
 });
 
 
 /**
- * @description Get all posts
+ * @description Get all posts within pagination range in query params
  */
 router.get('/posts', async (req, res, next) => {
 
@@ -104,7 +108,9 @@ router.get('/posts', async (req, res, next) => {
   catch(error) {
     res
     .status(404)
-    .send('Could not get posts')
+    .json({
+      error: 'Could not get posts'
+    })
   }
 });
 
@@ -129,7 +135,7 @@ router.put('/posts/:postId', checkAuth, upload.single("image"), async (req, res,
     }
     
     try {
-      await Post.updateOne({_id: req.params.postId}, updatedPost)
+      await Post.updateOne({_id: req.params.postId, creator: req.userData.userId}, updatedPost)
       res
       .status(200)
       .json(updatedPost)
@@ -137,7 +143,9 @@ router.put('/posts/:postId', checkAuth, upload.single("image"), async (req, res,
     catch(error) {
       res
       .status(404)
-      .send('Could not update post')
+      .json({
+        error: 'Could not update post'
+      })
     }
 });
 
@@ -148,7 +156,7 @@ router.put('/posts/:postId', checkAuth, upload.single("image"), async (req, res,
 router.get('/posts/:postId', async (req, res, next) => {
   try {
     const postId = req.params.postId
-    const post = await Post.findById(postId)
+    const post = await Post.findById({_id: postId})
     res
     .status(200)
     .json(post);
@@ -156,7 +164,9 @@ router.get('/posts/:postId', async (req, res, next) => {
   catch(error) {
     res
     .status(404)
-    .send('Could not find post')
+    .json({
+      error: 'Could not get post'
+    })
   }
 });
 
@@ -168,7 +178,7 @@ router.delete('/posts', checkAuth, async (req, res, next) => {
   const targetId = req.body._id
 
   try {
-    await Post.deleteOne({_id: targetId})
+    await Post.deleteOne({_id: targetId, creator: req.userData.userId})
     res
     .status(200)
     .json({
@@ -179,7 +189,10 @@ router.delete('/posts', checkAuth, async (req, res, next) => {
   catch(error) {
     res
     .status(404)
-    .send('Could not delete post')
+    .json({
+      error: 'Could not delete'
+    })
+    
   }
 });
 
