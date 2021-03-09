@@ -1,42 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const multer = require('multer');
 const checkAuth = require('../middleware/check-auth');
 const PostsController = require("../controllers/posts.controller");
-
-const MIME_TYPE_MAP = {
-  'image/png': 'png',
-  'image/jpeg': 'jpeg',
-  'image/jpg': 'jpeg'
-}
-
-const storageLocation = multer.diskStorage({
-  // will be executed whenever multer tries to save a file
-  destination: (request, file, callback) => {
-
-    const isValid = MIME_TYPE_MAP[file.mimetype]
-
-    // file path is relative to server 
-    if (!isValid) {
-      throw new Error('Invalid MIME type')
-    }
-    callback(null, "backend/images");
-
-  },
-  filename: (request, file, callback) => {
-    const name = file.originalname.toLowerCase().split(' ').join('-');
-  
-    const extension = MIME_TYPE_MAP[file.mimetype]
-    callback(null, name + '-' + Date.now() + '.' + extension)
-    }
-});
-
-const upload = multer({ storage: storageLocation });
+const saveImage = require("../middleware/save-image");
 
 /** 
  * @description Create a new post
  */
-router.post('/posts', checkAuth, upload.single("image"), PostsController.createPost);
+router.post('/posts', checkAuth, saveImage, PostsController.createPost);
 
 
 /**
@@ -55,7 +26,7 @@ router.get('/posts', PostsController.getPosts);
  * @description
  * Update single post
  */
-router.put('/posts/:postId', checkAuth, upload.single("image"), PostsController.updatePost);
+router.put('/posts/:postId', checkAuth, saveImage, PostsController.updatePost);
 
 /**
  * @description
