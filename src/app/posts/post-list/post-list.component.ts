@@ -33,7 +33,7 @@ export class PostListComponent implements OnInit {
   public pageSizeOptions: number[] = [5];
   
   ngOnInit(): void {
-
+    this.isPostsLoading = true;
     this.postService.getPostCount();
 
     this.route.queryParams.subscribe(params => {
@@ -42,7 +42,7 @@ export class PostListComponent implements OnInit {
     });
 
 
-    this.isPostsLoading = true;
+    
     this.postService.postSource$.subscribe((postData) => {
       this.postList = postData;
       this.isPostsLoading = false;

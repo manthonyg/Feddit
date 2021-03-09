@@ -6,14 +6,13 @@ import { AuthData } from "../models/auth-data.model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { MessagerService } from "./messager.service";
-import { ThrowStmt } from "@angular/compiler";
 @Injectable({providedIn: 'root'})
   export class UserService {
 
     constructor(
       private _http: HttpClient, 
-      private router: Router, 
-      private _messagerService: MessagerService
+      private _router: Router, 
+      private _messagerService: MessagerService,
       ) {}
     private LOCALPATH = "http://localhost:3000"
 
@@ -53,7 +52,7 @@ import { ThrowStmt } from "@angular/compiler";
       .post<{username: string, _id: string}>(`${this.LOCALPATH}/api/user/register`, userInfo)
       .subscribe(user => {
         this._setUser({username: user.username, id: user._id})
-        this.router.navigate(['/login'])
+        this._router.navigate(['/login'])
       })
     }
 
@@ -62,7 +61,6 @@ import { ThrowStmt } from "@angular/compiler";
       if (!authInfo) {
         return
       }
-      console.log(authInfo)
       const now = new Date();
       const isInFuture: boolean = authInfo.tokenDuration > now;
 
@@ -111,21 +109,23 @@ import { ThrowStmt } from "@angular/compiler";
     public login = (userInfo) => {
       return this._http
       .post<{duration: number, token: string, user: {username: string, _id: string}}>(`${this.LOCALPATH}/api/user/login`, userInfo)
-      .subscribe(response => {
-        const {token, duration, user} = response
-        this._setToken({token, duration});
-        this._saveAuthData(token, this._createExpirationDate(duration), {username: user.username, id: user._id});
-        this._setTokenTimeout(duration);
-        this._setLogStatus(true);
-        this._setUser({
+      .subscribe(
+        response => {
+          const {token, duration, user} = response
+          this._setToken({token, duration});
+          this._saveAuthData(token, this._createExpirationDate(duration), {username: user.username, id: user._id});
+          this._setTokenTimeout(duration);
+          this._setLogStatus(true);
+          this._setUser({
           username: user.username,
           id: user._id
         });
-      },
-      error => {
-        return this._messagerService.createMessage({content: "Bad credentials", type: "Error", duration: 3000})
-      });
-    }
+        this._router.navigate(['/']);
+        },
+        error => {
+          return error
+        })
+      }
 
     public logout = () => {
       clearTimeout(this._tokenTimeout)
@@ -133,7 +133,7 @@ import { ThrowStmt } from "@angular/compiler";
       this._setToken(null);
       this._setLogStatus(false);
       this._setUser(null)
-      this.router.navigate(['/login']);
+      this._router.navigate(['/login']);
     }
 
     public fetchUser = (username: string) => {

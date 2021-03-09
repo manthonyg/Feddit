@@ -37,6 +37,9 @@ export class HeaderComponent implements OnInit {
         this.messagerService.createMessage({content: `Logged in`, type: 'Success', duration: 1500})
       }
       this.isLoggedIn = newLogStatus
+    },
+    error => {
+      return this.messagerService.createMessage({content: `Failed to log in`, type: 'Error', duration: 1500});
     });
 
     this.userService.tokenSource$

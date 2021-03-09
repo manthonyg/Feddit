@@ -1,3 +1,4 @@
+<mat-spinner *ngIf="isPostsLoading"></mat-spinner>
   <mat-accordion *ngIf="!!postList" class="post-container">
     <mat-expansion-panel class="post" *ngFor="let post of postList" 
                           (opened)="panelOpenState = true"
@@ -17,8 +18,6 @@
       <button *ngIf="isLoggedIn && currentUser.id === post.creator" mat-button [routerLink]="['edit', post._id]">Edit</button>
     </mat-expansion-panel>
   </mat-accordion>
-  <mat-spinner *ngIf="isPostsLoading">HELLO</mat-spinner>
-
   <mat-accordion *ngIf="postList.length === 0" class="post-container">
     <p class="post-status"><em>No Posts</em></p>
   </mat-accordion>

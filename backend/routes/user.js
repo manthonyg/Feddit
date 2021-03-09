@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const Post = require('../models/post');
-const multer = require('multer');
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -35,7 +33,7 @@ router.post('/user/login', async (req, res, next) => {
     return res
     .status(401)
     .json({
-      message: 'Authentication failed'
+      message: 'Username does not exist'
     });
   }
     // use the compare method to see if both the password and current user password
@@ -43,7 +41,7 @@ router.post('/user/login', async (req, res, next) => {
     const passwordMatch = await bcrypt.compare(req.body.password, currentUser.password)
     if (!passwordMatch) {
       return res
-      .status(404)
+      .status(401)
       .json({
         message: 'Wrong password'
       });
@@ -74,15 +72,6 @@ router.post('/user/login', async (req, res, next) => {
   }
   
 });
-  // bcrypt.hash(req.body.password).then(hash => {
-  //   const newUser = User.save({
-  //     username: req.body.username,
-  //     password: hash
-  //   })
-  //   res
-  //   .status(201)
-  //   .json(newUser)
-  // })
 
 
 module.exports = router

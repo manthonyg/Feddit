@@ -18,8 +18,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private messagerService: MessagerService, 
-    private userService: UserService, 
-    private router: Router) { }
+    private userService: UserService) { }
 
   ngOnInit(): void {
 
@@ -42,7 +41,7 @@ export class LoginComponent implements OnInit {
 
     if (this.form.valid) {
       this.userService.login({username: this.form.value.username, password: this.form.value.password})
-      this.router.navigate(['/']);
+      this.form.reset()
   }
  }
 }
