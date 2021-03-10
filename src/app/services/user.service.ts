@@ -66,7 +66,7 @@ import { MessagerService } from "./messager.service";
 
       if (isInFuture) {
         this._setUser({username: authInfo.username, id: authInfo.userId})
-        this._setTokenTimeout(3000);
+        this._setTokenTimeout(360000);
         this._setLogStatus(true)
       }
     }

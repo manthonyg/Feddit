@@ -7,13 +7,13 @@ const userRoutes = require('./routes/user');
 const path = require("path");
 
 // Connection URL
-const url = 'mongodb://localhost:27017/angular';
+const connectString = "mongodb+srv://" + process.env.MONGO_USERNAME + ":" + process.env.MONGO_PASSWORD + "@cluster0.b0zcd.mongodb.net";
 const options = { useUnifiedTopology: true, useNewUrlParser: true};
 
 
 const connectMongoose = async () => {
   try { 
-  const connection = await mongoose.connect(url, options)
+  const connection = await mongoose.connect(connectString, options)
   console.log('connected')
   }
   catch(error) {

@@ -20,7 +20,7 @@ try {
     res
     .status(404)
     .json({
-      message: 'Could not create user'
+      message: 'Username taken'
     });
    }
   };
@@ -49,7 +49,7 @@ exports.loginUser = async (req, res, next) => {
     // create new token and send to client
     const token = jwt.sign(
       {username: currentUser.username, userId: currentUser._id}, 
-      'secret_development', 
+      process.env.JWT_SECRET, 
       {expiresIn: '1h'}
       );
     res
