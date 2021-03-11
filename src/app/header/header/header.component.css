@@ -10,3 +10,23 @@
 .log-status {
   margin: 0px 20px;
 }
+
+.logo {
+  font-size: 1rem;
+}
+
+.user-status {
+  font-size: .75rem;
+  margin: 0px 20px;
+}
+
+.logout-link {
+  color:rebeccapurple;
+  font-weight: 800;
+}
+
+
+.logout-link:hover {
+  cursor: pointer;
+  color: purple;
+}

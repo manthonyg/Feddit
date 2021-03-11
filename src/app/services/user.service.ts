@@ -15,13 +15,13 @@ import { environment } from "src/environments/environment";
       private _router: Router, 
       private _messagerService: MessagerService,
       ) {}
-      
+
     private apiURL = environment.apiUrl
 
     private readonly _userSource = new BehaviorSubject<User>({username: '', id: ''});
     readonly userSource$ = this._userSource.asObservable();
     
-    private readonly _tokenSource = new BehaviorSubject<Token>({token: '', duration: 3000}); // seconds
+    private readonly _tokenSource = new BehaviorSubject<Token>({token: '', duration: 360000}); // seconds
     readonly tokenSource$ = this._tokenSource.asObservable();
 
     private readonly _logStatusSource = new BehaviorSubject<boolean>(false);
@@ -93,7 +93,7 @@ import { environment } from "src/environments/environment";
 
     private _createExpirationDate(duration: number) {
       const now = new Date();
-      return new Date(now.getTime() + duration * 10)
+      return new Date(now.getTime() + duration)
     }
 
     private _resetAuthData() {

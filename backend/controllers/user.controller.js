@@ -57,7 +57,7 @@ exports.loginUser = async (req, res, next) => {
     .json({
       user: currentUser,
       token: token,
-      duration: 30000
+      duration: 3600000
     });
   }
   catch(error) {

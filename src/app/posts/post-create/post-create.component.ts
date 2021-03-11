@@ -40,9 +40,7 @@ export class PostCreateComponent implements OnInit, AfterViewInit {
       message: new FormControl(null, {
         validators: [Validators.required, Validators.maxLength(255)]
       }),
-      image: new FormControl(null, {
-        validators: [mimeType],
-      })
+      image: new FormControl(null, {})
     });
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {

@@ -1,7 +1,7 @@
 <p>
   <mat-toolbar>
-    <span>Feddit</span>
-    <p class="log-status" *ngIf="isLoggedIn">{{ currentUser.username }} </p>
+    <span class="logo">Feddit</span>
+    <p class="user-status" *ngIf="isLoggedIn">Welcome, {{ currentUser.username }} <span (click)="handleLogout()" class="logout-link">(logout)</span> </p>
     <span class="example-spacer"></span>
   <button mat-button  *ngIf="isLoggedIn" routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" aria-label="button to view all posts">
     View Posts
@@ -15,6 +15,5 @@
   <button *ngIf="!isLoggedIn" mat-button routerLink="/register" routerLinkActive="active-link" aria-label="button to log a user in">
    Register
   </button>
-  <button *ngIf="isLoggedIn" (click)="handleLogout()" type="button">Logout</button>
   </mat-toolbar>
 </p>

@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit {
 
     if (this.form.valid) {
       this.userService.login({username: this.form.value.username, password: this.form.value.password})
-      this.form.reset()
   }
  }
 }
