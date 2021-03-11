@@ -4,12 +4,14 @@ import { Post } from "../posts/models/post.model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map } from 'rxjs/operators';
 import { Router } from "@angular/router";
+import { environment } from "src/environments/environment";
 @Injectable({providedIn: 'root'})
 export class PostService {
 
   constructor(private _http: HttpClient, private _router: Router) { }
   
-  LOCALPATH = "http://localhost:3000"
+  public apiURL = environment.apiUrl;
+   
   private readonly _postSource = new BehaviorSubject<Post[]>([]);
   private readonly _postCount = new BehaviorSubject<number>(0);
 
@@ -20,7 +22,7 @@ export class PostService {
 
     const queryParams = `?pagesize=${pageSize}&page=${page}`
     this._http
-    .get<Post[]>(`${this.LOCALPATH}/api/posts/${queryParams}`)
+    .get<Post[]>(`${this.apiURL}/api/posts/${queryParams}`)
     .subscribe((postData) => {
       this._postSource.next(postData)
     })
@@ -32,7 +34,7 @@ export class PostService {
 
   public getPostCount() {
     this._http
-    .get<number>(`${this.LOCALPATH}/api/posts/count`)
+    .get<number>(`${this.apiURL}/api/posts/count`)
     .subscribe((postCount) => {
       this._postCount.next(postCount)
     })
@@ -54,7 +56,7 @@ export class PostService {
       postData.append('message', message);
       postData.append('image', image);
 
-    this._http.post<Post>(`${this.LOCALPATH}/api/posts`, postData)
+    this._http.post<Post>(`${this.apiURL}/api/posts`, postData)
     .subscribe((post) => {
       const newPost: Post = {
         _id: post._id,
@@ -79,11 +81,11 @@ export class PostService {
       },
     };
 
-      return this._http.delete(`${this.LOCALPATH}/api/posts`, options)
+      return this._http.delete(`${this.apiURL}/api/posts`, options)
 }
 
   public getPost(postId: string) {
-    return this._http.get<Post>(`${this.LOCALPATH}/api/posts/${postId}`)
+    return this._http.get<Post>(`${this.apiURL}/api/posts/${postId}`)
   }
 
   public updatePost(
@@ -114,7 +116,7 @@ export class PostService {
       }
 
       this._http
-      .put<Post>(`${this.LOCALPATH}/api/posts/${postId}`, postData)
+      .put<Post>(`${this.apiURL}/api/posts/${postId}`, postData)
       .subscribe((response) => {
         const currentPosts = this.getPosts();
         const targetPostIdx = currentPosts.findIndex(post => post._id === postId)

@@ -6,6 +6,7 @@ import { AuthData } from "../models/auth-data.model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { MessagerService } from "./messager.service";
+import { environment } from "src/environments/environment";
 @Injectable({providedIn: 'root'})
   export class UserService {
 
@@ -14,7 +15,8 @@ import { MessagerService } from "./messager.service";
       private _router: Router, 
       private _messagerService: MessagerService,
       ) {}
-    private LOCALPATH = "http://localhost:3000"
+      
+    private apiURL = environment.apiUrl
 
     private readonly _userSource = new BehaviorSubject<User>({username: '', id: ''});
     readonly userSource$ = this._userSource.asObservable();
@@ -49,7 +51,7 @@ import { MessagerService } from "./messager.service";
     
     public createUser = (userInfo) => {
       return this._http
-      .post<{username: string, _id: string}>(`${this.LOCALPATH}/api/user/register`, userInfo)
+      .post<{username: string, _id: string}>(`${this.apiURL}/api/user/register`, userInfo)
       .subscribe(user => {
         this._setUser({username: user.username, id: user._id})
         this._router.navigate(['/login'])
@@ -108,7 +110,7 @@ import { MessagerService } from "./messager.service";
 
     public login = (userInfo) => {
       return this._http
-      .post<{duration: number, token: string, user: {username: string, _id: string}}>(`${this.LOCALPATH}/api/user/login`, userInfo)
+      .post<{duration: number, token: string, user: {username: string, _id: string}}>(`${this.apiURL}/api/user/login`, userInfo)
       .subscribe(
         response => {
           const {token, duration, user} = response
@@ -138,7 +140,7 @@ import { MessagerService } from "./messager.service";
 
     public fetchUser = (username: string) => {
       this._http
-      .get<User>(`${this.LOCALPATH}/api/user/${username}`)
+      .get<User>(`${this.apiURL}/api/user/${username}`)
       .subscribe(user => {
         this._setUser(user)
       });    

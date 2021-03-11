@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json()) // will return valid express middleware to parse json data
 // app.use(bodyParse.urlencoded({extended: true})) // would be for xml encoded stuff
-app.use("/images", express.static(path.join("backend/images")));
+app.use("/images", express.static(path.join("images")));
 
 app.use("/api", postRoutes);
 app.use("/api", userRoutes);

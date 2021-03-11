@@ -18,7 +18,7 @@ const storageLocation = multer.diskStorage({
     if (!isValid) {
       throw new Error('Invalid MIME type')
     }
-    callback(null, "backend/images");
+    callback(null, "images");
 
   },
   filename: (request, file, callback) => {
