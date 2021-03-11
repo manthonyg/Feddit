@@ -1,19 +1,46 @@
 <p>
   <mat-toolbar>
     <span class="logo">Feddit</span>
-    <p class="user-status" *ngIf="isLoggedIn">Welcome, {{ currentUser.username }} <span (click)="handleLogout()" class="logout-link">(logout)</span> </p>
+    <p class="user-status" *ngIf="isLoggedIn">
+      Welcome, {{ currentUser.username }} <span (click)="handleLogout()" class="logout-link">(logout)</span>
+    </p>
     <span class="example-spacer"></span>
-  <button mat-button  *ngIf="isLoggedIn" routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" aria-label="button to view all posts">
-    View Posts
-  </button>
-  <button *ngIf="isLoggedIn" mat-button routerLink="/create" routerLinkActive="active-link" aria-label="button to create a new post">
-    Create Post
-  </button>
-  <button *ngIf="!isLoggedIn" mat-button routerLink="/login" routerLinkActive="active-link" aria-label="button to log a user in">
-   Login 
-  </button>
-  <button *ngIf="!isLoggedIn" mat-button routerLink="/register" routerLinkActive="active-link" aria-label="button to log a user in">
-   Register
-  </button>
+    <button
+      mat-button
+      *ngIf="isLoggedIn"
+      routerLink="/"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      aria-label="button to view all posts"
+    >
+      View Posts
+    </button>
+    <button
+      *ngIf="isLoggedIn"
+      mat-button
+      routerLink="/create"
+      routerLinkActive="active-link"
+      aria-label="button to create a new post"
+    >
+      Create Post
+    </button>
+    <button
+      *ngIf="!isLoggedIn"
+      mat-button
+      routerLink="/login"
+      routerLinkActive="active-link"
+      aria-label="button to log a user in"
+    >
+      Login
+    </button>
+    <button
+      *ngIf="!isLoggedIn"
+      mat-button
+      routerLink="/register"
+      routerLinkActive="active-link"
+      aria-label="button to log a user in"
+    >
+      Register
+    </button>
   </mat-toolbar>
 </p>

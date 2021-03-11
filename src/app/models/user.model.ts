@@ -1,4 +1,4 @@
-import { Post } from "../posts/models/post.model";
+import { Post } from '../posts/models/post.model';
 
 export interface User {
   id: string;

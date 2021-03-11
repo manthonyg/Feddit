@@ -16,15 +16,14 @@
 }
 
 .user-status {
-  font-size: .75rem;
+  font-size: 0.75rem;
   margin: 0px 20px;
 }
 
 .logout-link {
-  color:rebeccapurple;
+  color: rebeccapurple;
   font-weight: 800;
 }
-
 
 .logout-link:hover {
   cursor: pointer;

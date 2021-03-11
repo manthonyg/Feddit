@@ -1,48 +1,21 @@
 <div class="flex-container">
-
   <form class="form-container" [formGroup]="form" (submit)="handleRegister()">
-
     <mat-form-field class="full-width-form">
       <mat-label>Username</mat-label>
-      <input 
-      matInput
-      formControlName="username"
-      type="text" 
-      >
+      <input matInput formControlName="username" type="text" />
       <mat-error *ngIf="form.get('username').invalid">Title must be greater than 3 characters</mat-error>
     </mat-form-field>
-  
-    <div class="flex-container">
 
-  
-    </div>
-    <mat-form-field class="full-width-form"> 
+    <div class="flex-container"></div>
+    <mat-form-field class="full-width-form">
       <mat-label>Password</mat-label>
-      <input 
-      matInput
-      formControlName="password"
-      type="password"
-      >
-      <mat-error *ngIf="form.get('password').invalid">
-        Password too short. Must be atleast 6 characters.</mat-error>
+      <input matInput formControlName="password" type="password" />
+      <mat-error *ngIf="form.get('password').invalid"> Password too short. Must be atleast 6 characters.</mat-error>
     </mat-form-field>
-    <div class="flex-container">
-
-  
-    </div>
-    <!-- <mat-form-field class="full-width-form"> 
-      <mat-label>Password</mat-label>
-  
-      <input 
-      matInput
-      formControlName="passwordConfirm"
-      >
-  
-      <mat-error *ngIf="form.get('passwordConfirm').invalid">Passwords must match</mat-error>
-    </mat-form-field> -->
+    <div class="flex-container"></div>
 
     <div class="post-button-container">
-    <button type="submit" mat-button color="primary">Register</button>
-     </div> 
+      <button type="submit" mat-button color="primary">Register</button>
+    </div>
   </form>
-  </div>
+</div>
