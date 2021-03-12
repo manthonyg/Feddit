@@ -17,15 +17,25 @@
 
 .user-status {
   font-size: 0.75rem;
-  margin: 0px 20px;
+  color: #fff;
+}
+
+.user-status-container {
+  height: 20px;
+  background-color: #cccccc;
 }
 
 .logout-link {
-  color: rebeccapurple;
+  color: cyan;
   font-weight: 800;
 }
 
 .logout-link:hover {
   cursor: pointer;
-  color: purple;
+  background-color: darkblue;
+}
+
+.header-container {
+  position: sticky;
+  top: 0px;
 }

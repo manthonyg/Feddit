@@ -1,0 +1,17 @@
+.app-container {
+}
+
+.main-content-container {
+  padding-top: 20px;
+  background-color: rebeccapurple;
+}
+
+.header-content-container {
+  position: sticky;
+  top: 0px;
+}
+
+.footer-content-container {
+  position: sticky;
+  bottom: 0px;
+}

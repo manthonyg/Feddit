@@ -1,7 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100vh;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background-color: rebeccapurple;
+}
 
 :root {
   --alert-success: #99cc33;
@@ -11,7 +18,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .snackbar-success {
   color: var(--alert-success);
-  border: 2px solid var(--alert-success)
+  border: 2px solid var(--alert-success);
 }
 
 .snackbar-success button {
@@ -25,6 +32,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .snackbar-error button {
-  color:var(--alert-error);
+  color: var(--alert-error);
   border: 2px solid var(--alert-error);
 }

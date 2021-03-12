@@ -13,7 +13,9 @@ export class PostService {
 
   private readonly _postSource = new BehaviorSubject<Post[]>([]);
   private readonly _postCount = new BehaviorSubject<number>(0);
+  private readonly _isPostLoading = new BehaviorSubject<boolean>(false);
 
+  readonly isPostLoading$ = this._isPostLoading.asObservable();
   readonly postCount$ = this._postCount.asObservable();
   readonly postSource$ = this._postSource.asObservable();
 
@@ -22,6 +24,10 @@ export class PostService {
     this._http.get<Post[]>(`${this.apiURL}/api/posts/${queryParams}`).subscribe((postData) => {
       this._postSource.next(postData);
     });
+  }
+
+  public setPostLoadingStatus(postLoadingStatus: boolean): void {
+    this._isPostLoading.next(postLoadingStatus);
   }
 
   public getPosts(): Post[] {
@@ -39,6 +45,7 @@ export class PostService {
   }
 
   public addPost(title: string, message: string, image: File): void {
+    this.setPostLoadingStatus(true);
     try {
       const postData = new FormData();
       postData.append('title', title);
@@ -53,8 +60,10 @@ export class PostService {
         const newPosts = [...this.getPosts(), newPost];
         this._setPosts(newPosts);
       });
+      this.setPostLoadingStatus(false);
     } catch (error) {
       console.log(error);
+      this.setPostLoadingStatus(false);
     }
   }
 

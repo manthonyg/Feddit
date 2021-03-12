@@ -1,30 +1,35 @@
-<mat-spinner *ngIf="isPostsLoading"></mat-spinner>
-  <mat-accordion *ngIf="!!postList" class="post-container">
-    <mat-expansion-panel class="post" *ngFor="let post of postList" 
-                          (opened)="panelOpenState = true"
-                          (closed)="panelOpenState = false">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{ post.title }}
-        </mat-panel-title>
-        <mat-panel-description>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <div class="post-image-container">
-        <img class="post-image" [src]="post.imagePath">
-      </div>
-      <p>{{ post.message }}</p> 
-      <button *ngIf="isLoggedIn && currentUser.id === post.creator" mat-button (click)="handleDelete(post)">Delete</button>
-      <button *ngIf="isLoggedIn && currentUser.id === post.creator" mat-button [routerLink]="['edit', post._id]">Edit</button>
-    </mat-expansion-panel>
-  </mat-accordion>
-  <mat-accordion *ngIf="postList.length === 0" class="post-container">
-    <p class="post-status"><em>No Posts</em></p>
-  </mat-accordion>
-  <mat-paginator 
-  [length]="totalPosts"
-  [pageSize]="pageSize"
-  [pageIndex]="page - 1"
-  [pageSizeOptions]="pageSizeOptions"
-  (page)="handlePage($event)">
-</mat-paginator>
+<div class="paginator-container">
+  <mat-paginator
+    class="paginator-container"
+    [length]="totalPosts"
+    [pageSize]="pageSize"
+    [pageIndex]="page - 1"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="handlePage($event)"
+  >
+  </mat-paginator>
+</div>
+
+<mat-accordion *ngIf="!!postList" class="post-container">
+  <mat-expansion-panel class="post" *ngFor="let post of postList">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ post.title }}
+      </mat-panel-title>
+      <mat-panel-description> </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="post-image-container">
+      <img class="post-image" [src]="post.imagePath" />
+    </div>
+    <p>{{ post.message }}</p>
+    <button *ngIf="isLoggedIn && currentUser.id === post.creator" mat-button (click)="handleDelete(post)">
+      Delete
+    </button>
+    <button *ngIf="isLoggedIn && currentUser.id === post.creator" mat-button [routerLink]="['edit', post._id]">
+      Edit
+    </button>
+  </mat-expansion-panel>
+</mat-accordion>
+<mat-accordion *ngIf="postList.length === 0 && !isPostsLoading" class="post-container">
+  <mat-spinner></mat-spinner>
+</mat-accordion>

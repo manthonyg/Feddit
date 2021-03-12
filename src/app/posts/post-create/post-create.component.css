@@ -3,11 +3,11 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+  background-color: #cccccc50;
 }
 
 .example-form {
   display: flex;
-  width: 500px;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -20,13 +20,13 @@
 }
 
 textarea {
-  width: 400px;
+  width: 300px;
   height: 100px;
 }
 
 .full-width-form {
-  width: 500px;
-  background-color: #cccccc50;
+  min-width: 350px;
+  background-color: #ffffff;
   margin: 10px;
   border-radius: 5px;
   padding: 10px;
@@ -59,16 +59,20 @@ textarea {
   border: 3px dashed var(--alert-error);
 }
 
+.button {
+  color: cyan;
+  border-color: cyan;
+}
+
 .existing-image-preview-container {
   width: 50px;
   margin: 20px;
-
 }
 
 .existing-image-preview {
   width: 50px;
   border-radius: 100%;
-};
+}
 
 .snackbar-success {
   background-color: seagreen;

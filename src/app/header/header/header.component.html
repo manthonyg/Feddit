@@ -1,9 +1,7 @@
-<p>
+<div class="header-container">
   <mat-toolbar>
     <span class="logo">Feddit</span>
-    <p class="user-status" *ngIf="isLoggedIn">
-      Welcome, {{ currentUser.username }} <span (click)="handleLogout()" class="logout-link">(logout)</span>
-    </p>
+
     <span class="example-spacer"></span>
     <button
       mat-button
@@ -43,4 +41,9 @@
       Register
     </button>
   </mat-toolbar>
-</p>
+  <div class="user-status-container">
+    <p class="user-status" *ngIf="isLoggedIn">
+      Welcome, {{ currentUser.username }} <span (click)="handleLogout()" class="logout-link">(logout)</span>
+    </p>
+  </div>
+</div>

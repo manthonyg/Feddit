@@ -8,20 +8,20 @@ import { Token } from '../../models/token.model';
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
-  styleUrls: ['./post-list.component.css']
+  styleUrls: ['./post-list.component.css'],
 })
 export class PostListComponent implements OnInit {
-
   constructor(
     private postService: PostService,
     private messagerService: MessagerService,
     private userService: UserService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router
+  ) {}
 
   public isPostsLoading = false;
   public postList: Post[];
-  public panelOpenState = false;
+  public panelOpenState = true;
   public token: Token;
   public isLoggedIn = false;
   public currentUser = null;
@@ -33,20 +33,26 @@ export class PostListComponent implements OnInit {
   public pageSizeOptions: number[] = [5];
 
   ngOnInit(): void {
-    this.isPostsLoading = true;
     this.postService.getPostCount();
 
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.pageSize = params.pagesize;
       this.page = params.page;
     });
 
-
-
-    this.postService.postSource$.subscribe((postData) => {
-      this.postList = postData;
-      this.isPostsLoading = false;
+    this.postService.isPostLoading$.subscribe((postLoadingStatus) => {
+      this.isPostsLoading = postLoadingStatus;
     });
+
+    this.postService.postSource$.subscribe(
+      (postData) => {
+        this.postList = postData;
+        this.postService.setPostLoadingStatus(false);
+      },
+      (error) => {
+        this.postService.setPostLoadingStatus(false);
+      }
+    );
 
     this.postService.postCount$.subscribe((postCount) => {
       this.totalPosts = postCount;
@@ -54,50 +60,45 @@ export class PostListComponent implements OnInit {
 
     this.postService.fetchPosts(this.pageSize, this.page);
 
-    this.userService.logStatusSource$.subscribe(newStatus => {
+    this.userService.logStatusSource$.subscribe((newStatus) => {
       this.isLoggedIn = newStatus;
     });
 
     this.checkMessages();
 
-    this.userService.tokenSource$.subscribe(token => {
+    this.userService.tokenSource$.subscribe((token) => {
       this.token = token;
     });
 
-    this.userService.userSource$.subscribe(user => {
+    this.userService.userSource$.subscribe((user) => {
       this.currentUser = user;
     });
   }
 
-
   public handleDelete(post: Post): void {
-      this.postService.deletePost(post)
-      .subscribe(
-        response => {
-          this.messagerService.createMessage({type: 'Success', content: `Deleted ${post.title}`, duration: 5000});
-          this.postService.fetchPosts(this.pageSize, this.page);
-          this.postService.getPostCount();
-
-        },
-        error => {
-          this.messagerService.createMessage({type: 'Error', content: `Could not delete post`, duration: 5000});
-      });
-    }
+    this.postService.deletePost(post).subscribe(
+      (response) => {
+        this.messagerService.createMessage({ type: 'Success', content: `Deleted ${post.title}`, duration: 5000 });
+        this.postService.fetchPosts(this.pageSize, this.page);
+        this.postService.getPostCount();
+      },
+      (error) => {
+        this.messagerService.createMessage({ type: 'Error', content: `Could not delete post`, duration: 5000 });
+      }
+    );
+  }
 
   public handlePage(pageData): void {
     this.page = pageData.pageIndex + 1;
     this.pageSize = pageData.pageSize;
-    // this.numberOfPages = Math.ceil(this.postList.length / this.pageSize);
     this.postService.fetchPosts(this.pageSize, this.page);
     const queryParams: Params = { page: this.page, pagesize: this.pageSize };
 
-    this.router.navigate(
-      [],
-      {
-        relativeTo: this.route,
-        queryParams,
-      });
-    }
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
+    });
+  }
 
   public checkMessages(): void {
     const currentMessage = this.messagerService.getMessage();
